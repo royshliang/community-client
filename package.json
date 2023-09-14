@@ -1,0 +1,30 @@
+{
+    "name": "community-client",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "production": "vite build --base=/community",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "@popperjs/core": "^2.11.8",
+        "axios": "^1.5.0",
+        "bootstrap": "^5.3.1",
+        "firebase": "^10.3.0",
+        "pinia": "^2.1.6",
+        "sass": "^1.64.2",
+        "sweetalert2": "^11.7.27",
+        "vue": "^3.3.4",
+        "vue-loading-overlay": "^6.0.3",
+        "vue-router": "^4.2.4",
+        "vue-toastification": "^2.0.0-rc.5"
+    },
+    "devDependencies": {
+        "@vitejs/plugin-vue": "^4.2.3",
+        "vite": "^4.4.5",
+        "vite-plugin-pwa": "^0.16.4"
+    }
+}
