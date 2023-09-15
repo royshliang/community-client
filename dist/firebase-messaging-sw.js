@@ -43,7 +43,15 @@ self.addEventListener('notificationclick', event => {
                     return client.focus();
                 }
                 if(clients.openWindow) {
-                    return clients.openWindow('/timetable');
+                    return clients.openWindow('/timetable')
+                                .then(e => {
+                                    console.log("openWindow okok");
+                                    console.log(e)
+                                })
+                                .catch(err => {
+                                    console.log("openWindow failed");
+                                    console.log(JSON.stringify(err))
+                                })
                 }
             }
         })

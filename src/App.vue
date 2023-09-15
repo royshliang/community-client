@@ -12,7 +12,7 @@
                 -->
 
                 <a class="navbar-brand">
-                    HELP 0.2.1
+                    HELP 0.2.2
                 </a>
                 <ul class="d-flex">
                     <span>1.0.0</span>
