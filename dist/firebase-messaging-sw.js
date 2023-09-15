@@ -15,15 +15,15 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 // ------- handling background notifications
-// messaging.onBackgroundMessage((payload) => {
-//     console.log('[firebase-messaging-sw.js] Received background message ', payload);
-//     const notificationTitle = payload.notification.title;
-//     const notificationOptions = {
-//         body: payload.notification.body,
-//         tag: "notif-1"
-//     };
-//     return self.registration.showNotification(notificationTitle, notificationOptions);
-// });
+messaging.onBackgroundMessage((payload) => {
+    console.log('[firebase-messaging-sw.js] Received background message ', payload);
+    const notificationTitle = payload.notification.title;
+    const notificationOptions = {
+        body: payload.notification.body,
+        tag: "notif-1"
+    };
+    return self.registration.showNotification(notificationTitle, notificationOptions);
+});
 // ------- handling notification click action
 // self.addEventListener('notificationclick', event => {
 //     event.notification.close();
