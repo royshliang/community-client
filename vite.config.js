@@ -11,7 +11,7 @@ export default defineConfig({
         vue(),
 
         VitePWA({
-            version: "0.2.2",
+            version: "0.2.3",
             registerType: 'autoUpdate',
             manifest: {
                 name: 'My Awesome App',
