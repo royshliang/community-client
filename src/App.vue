@@ -12,7 +12,7 @@
                 -->
 
                 <a class="navbar-brand">
-                    HELP 0.1.6
+                    HELP 0.1.7
                 </a>
                 <ul class="d-flex">
                     <span>1.0.0</span>
@@ -50,8 +50,10 @@
     // --- foreground notification display
     const messaging = getMessaging();
     onMessage(messaging, (payload) => {
-        console.log('Message received. ', payload)
-        alert(payload.notification.title)
+        console.log('Message received. ', JSON.stringify(payload))
+        let msgData = payload.notification || payload.data
+
+        alert(msgData.title)
     });
 
     // --- offline / online events
