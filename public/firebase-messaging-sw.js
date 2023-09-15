@@ -17,10 +17,12 @@ const messaging = firebase.messaging();
 // ------- handling background notifications
 messaging.onBackgroundMessage((payload) => {
     console.log('[firebase-messaging-sw.js] Received background message ', payload);
-    const notificationTitle = payload.notification.title;
+
+    const msgData = payload.notification || payload.data;
+
+    const notificationTitle = msgData.title;
     const notificationOptions = {
-        body: payload.notification.body,
-        tag: "notif-1"
+        body: msgData.body
     };
     self.registration.showNotification(notificationTitle, notificationOptions);
 });
