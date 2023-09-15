@@ -1,5 +1,5 @@
-importScripts('https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/10.4.0/firebase-messaging.js');
+importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging.js');
 
 // Initialize Firebase
 var firebaseConfig = {
@@ -12,9 +12,9 @@ var firebaseConfig = {
     measurementId: "G-QFD66SWDVQ"
 };
 firebase.initializeApp(firebaseConfig);
+const messaging = firebase.messaging();
 
 // ------- handling background notifications
-// const messaging = firebase.messaging();
 // messaging.onBackgroundMessage((payload) => {
 //     console.log('[firebase-messaging-sw.js] Received background message ', payload);
 //     const notificationTitle = payload.notification.title;
@@ -22,13 +22,11 @@ firebase.initializeApp(firebaseConfig);
 //         body: payload.notification.body,
 //         tag: "notif-1"
 //     };
-
 //     return self.registration.showNotification(notificationTitle, notificationOptions);
 // });
 // ------- handling notification click action
 // self.addEventListener('notificationclick', event => {
 //     event.notification.close();
-
 //     event.waitUntil(
 //         clients.matchAll({
 //             includeUncontrolled: true,
@@ -40,7 +38,6 @@ firebase.initializeApp(firebaseConfig);
 //                 if(client.url == "/" && 'focus' in client) {
 //                     return client.focus();
 //                 }
-
 //                 if(clients.openWindow) {
 //                     return clients.openWindow('/');
 //                 }
