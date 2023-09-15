@@ -31,29 +31,51 @@ messaging.onBackgroundMessage((payload) => {
 self.addEventListener('notificationclick', event => {
     event.notification.close();
 
+    // event.waitUntil(
+    //     clients.matchAll({
+    //         includeUncontrolled: true,
+    //         type: 'window'
+    //     })
+    //     .then(function(clientList) {
+    //         for(var i=0; i<clientList.length; i++) {
+    //             var client = clientList[i];
+    //             if(client.url == "/" && 'focus' in client) {
+    //                 return client.focus();
+    //             }
+    //             if(clients.openWindow) {
+    //                 return clients.openWindow('/')
+    //                             .then(e => {
+    //                                 console.log("openWindow okok");
+    //                                 console.log(e)
+    //                             })
+    //                             .catch(err => {
+    //                                 console.log("openWindow failed");
+    //                                 console.log(JSON.stringify(err))
+    //                             })
+    //             }
+    //         }
+    //     })
+    // )
+    //https://stackoverflow.com/questions/30302636/clients-openwindow-not-allowed-to-open-a-window-on-a-serviceworker-google-c?rq=4
     event.waitUntil(
-        clients.matchAll({
-            includeUncontrolled: true,
-            type: 'window'
-        })
-        .then(function(clientList) {
-            for(var i=0; i<clientList.length; i++) {
-                var client = clientList[i];
-                if(client.url == "/" && 'focus' in client) {
-                    return client.focus();
+        //do we have some windows of our app?
+        self.clients.matchAll({includeUncontrolled: true, type: 'window'})
+            .then(list=>{
+                console.log('total clients: '+list.length)
+                if(list.length === 0){
+                    //no windows of our app. We will open new one
+                    console.log('no clients found')
+                    return self.clients.openWindow(url)
+                        .then((windowClient) => {
+                            //we should focus new window and return Promise to terminate our event
+                            return windowClient ? windowClient.focus() : Promise.resolve()
+                        })
                 }
-                if(clients.openWindow) {
-                    return clients.openWindow('/')
-                                .then(e => {
-                                    console.log("openWindow okok");
-                                    console.log(e)
-                                })
-                                .catch(err => {
-                                    console.log("openWindow failed");
-                                    console.log(JSON.stringify(err))
-                                })
-                }
-            }
-        })
-    )
+                const client = list[0]
+                console.log(client)
+                //we have a window of our app. Let's focus it and return Promise 
+                client.focus()
+                console.log('--window focused---')
+                return Promise.resolve()
+            }))
 });
