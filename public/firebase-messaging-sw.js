@@ -65,7 +65,7 @@ self.addEventListener('notificationclick', event => {
                 if(list.length === 0){
                     //no windows of our app. We will open new one
                     console.log('no clients found')
-                    return self.clients.openWindow(url)
+                    return self.clients.openWindow('/')
                         .then((windowClient) => {
                             //we should focus new window and return Promise to terminate our event
                             return windowClient ? windowClient.focus() : Promise.resolve()
