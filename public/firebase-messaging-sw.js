@@ -22,7 +22,10 @@ messaging.onBackgroundMessage((payload) => {
 
     const notificationTitle = msgData.title;
     const notificationOptions = {
-        body: msgData.body
+        body: msgData.body,
+        icon: "",
+        vibrate: [200, 100, 200, 100, 200, 100, 200],
+        tag:"timetable"
     };
     self.registration.showNotification(notificationTitle, notificationOptions);
 });
