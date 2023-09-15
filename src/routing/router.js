@@ -6,7 +6,7 @@ import TimetablePage from '@/pages/TimetablePage.vue'
 import LoginPage from '@/pages/LoginPage.vue'
 
 const router = new createRouter({
-	history: createWebHashHistory(),
+	history: createWebHistory(),
 	routes: [
         {
             path: '/',
