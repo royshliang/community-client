@@ -22,7 +22,7 @@ messaging.onBackgroundMessage((payload) => {
         body: payload.notification.body,
         tag: "notif-1"
     };
-    return self.registration.showNotification(notificationTitle, notificationOptions);
+    self.registration.showNotification(notificationTitle, notificationOptions);
 });
 // ------- handling notification click action
 // self.addEventListener('notificationclick', event => {
