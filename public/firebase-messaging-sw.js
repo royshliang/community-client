@@ -23,7 +23,7 @@ messaging.onBackgroundMessage((payload) => {
     const notificationTitle = msgData.title;
     const notificationOptions = {
         body: msgData.body,
-        icon: "",
+        icon: "/icon-48x48.png",
         vibrate: [200, 100, 200, 100, 200, 100, 200],
         tag:"timetable"
     };
