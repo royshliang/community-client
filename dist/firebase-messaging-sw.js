@@ -1,6 +1,7 @@
 importScripts('https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/10.4.0/firebase-messaging.js');
 
+// Initialize Firebase
 var firebaseConfig = {
     apiKey: "AIzaSyD61Gsz3cx_8afusV3dArJzu7D6UEP7K8Q",
     authDomain: "vue-community-fcm.firebaseapp.com",
@@ -10,24 +11,40 @@ var firebaseConfig = {
     appId: "1:880762543904:web:b50de0d276a2e0f0bbc145",
     measurementId: "G-QFD66SWDVQ"
 };
-
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-const messaging = firebase.messaging();
 
-//https://firebase.google.com/docs/cloud-messaging/js/receive/
-//
-messaging.onBackgroundMessage((payload) => {
-    console.log('[firebase-messaging-sw.js] Received background message ', payload);
-    const notificationTitle = payload.notification.title;
-    const notificationOptions = {
-        body: payload.notification.body,
-        tag: "notif-1"
-    };
+// ------- handling background notifications
+// const messaging = firebase.messaging();
+// messaging.onBackgroundMessage((payload) => {
+//     console.log('[firebase-messaging-sw.js] Received background message ', payload);
+//     const notificationTitle = payload.notification.title;
+//     const notificationOptions = {
+//         body: payload.notification.body,
+//         tag: "notif-1"
+//     };
 
-    return self.registration.showNotification(notificationTitle, notificationOptions);
-});
-
+//     return self.registration.showNotification(notificationTitle, notificationOptions);
+// });
+// ------- handling notification click action
 self.addEventListener('notificationclick', event => {
-    console.log(event)
+    event.notification.close();
+
+    event.waitUntil(
+        clients.matchAll({
+            includeUncontrolled: true,
+            type: 'window'
+        })
+        .then(function(clientList) {
+            for(var i=0; i<clientList.length; i++) {
+                var client = clientList[i];
+                if(client.url == "/" && 'focus' in client) {
+                    return client.focus();
+                }
+
+                if(clients.openWindow) {
+                    return clients.openWindow('/');
+                }
+            }
+        })
+    )
 });
