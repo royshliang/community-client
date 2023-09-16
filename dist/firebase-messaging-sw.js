@@ -1,7 +1,7 @@
 importScripts('https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/8.1.1/firebase-messaging.js');
 
-// Initialize Firebase
+// 1. Initialize Firebase
 var firebaseConfig = {
     apiKey: "AIzaSyD61Gsz3cx_8afusV3dArJzu7D6UEP7K8Q",
     authDomain: "vue-community-fcm.firebaseapp.com",
@@ -14,7 +14,7 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-// ------- handling background notifications
+// 2. ------- handling background notifications
 messaging.onBackgroundMessage((payload) => {
     console.log('[firebase-messaging-sw.js] Received background message ', payload);
 
@@ -27,7 +27,7 @@ messaging.onBackgroundMessage((payload) => {
     };
     self.registration.showNotification(notificationTitle, notificationOptions);
 });
-// ------- handling notification click action
+// 3. ------- handling notification click action
 self.addEventListener('notificationclick', event => {
     event.notification.close();
 
@@ -60,22 +60,16 @@ self.addEventListener('notificationclick', event => {
     event.waitUntil(
         //do we have some windows of our app?
         self.clients.matchAll({includeUncontrolled: true, type: 'window'})
-            .then(list=>{
-                console.log('total clients: '+list.length)
-                if(list.length === 0){
-                    //no windows of our app. We will open new one
-                    console.log('no clients found')
-                    return self.clients.openWindow('/')
+            .then(clientList =>{
+                if(clientList.length === 0){
+                    return self.clients.openWindow('/timetable')
                         .then((windowClient) => {
                             //we should focus new window and return Promise to terminate our event
                             return windowClient ? windowClient.focus() : Promise.resolve()
                         })
                 }
-                const client = list[0]
-                console.log(client)
-                //we have a window of our app. Let's focus it and return Promise 
-                client.focus()
-                console.log('--window focused---')
+                else clientList[0].focus()
+
                 return Promise.resolve()
             }))
 });

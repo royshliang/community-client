@@ -4,6 +4,8 @@ import { createPinia } from 'pinia'
 import Toast from 'vue-toastification'
 import router from './routing/router'
 
+import { VueQrcodeReader } from "vue-qrcode-reader";
+
 import './styles/bootstrap.scss'
 import '@sweet/dist/sweetalert2.min.css';
 import '@vueloader/dist/css/index.css'
@@ -39,6 +41,7 @@ import App from './App.vue'
 createApp(App)
     .use(router)
     .use(Toast)
+    .use(VueQrcodeReader)
     .use(createPinia())
     .mount('#app')
 

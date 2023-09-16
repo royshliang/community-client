@@ -29,6 +29,10 @@
                             </div>
                         </div>
                         
+                        <div class="container p-3">
+                            <qrcode-stream @detect="onDetect" @decode="onDecode">111</qrcode-stream>
+                        </div>
+
                         <!--
                         <div class="row">
                             <div class="col-12">
@@ -76,6 +80,15 @@
     const toast = useToast()
     const authStore = useAuthStore()
     const router = useRouter()
+
+    function onDetect(data) {
+        alert('on detect:' + JSON.stringify(data))
+    }
+    function onDecode(data) {
+        alert('ondecode');
+        alert(data)
+
+    }
 
     async function login() {
         let fbToken = null;
