@@ -30,10 +30,7 @@
                                     <div class="scroll-area">
                                         <div class="vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
                                             <div class="vertical-timeline-item vertical-timeline-element" v-for="evt in dayTable.events" :key="evt.id">
-                                                <span class="vertical-timeline-element-icon bounce-in">
-                                                    <i class="badge badge-dot badge-dot-xl badge-success"></i>
-                                                </span>
-                                                <div class="vertical-timeline-element-content bounce-in">
+                                                <div class="vertical-timeline-element-content">
                                                     <h6 class="timeline-title">{{ evt.subjectName }}</h6>
                                                     <p>{{ evt.endTime }}</p>
                                                     <p>{{ evt.locationCode }}</p>
@@ -119,7 +116,7 @@
         content: '';
         position: absolute;
         top: 0;
-        left: 67px;
+        left: 78px;
         height: 100%;
         width: 4px;
         background: #e9ecef;
@@ -129,21 +126,6 @@
         position: relative;
         margin: 0 0 0.5rem;
     }
-    .vertical-timeline--animate .vertical-timeline-element-icon.bounce-in {
-        visibility: visible;
-        animation: cd-bounce-1 .8s;
-
-    }
-    .vertical-timeline-element-icon {
-        position: absolute;
-        top: 0;
-        left: 60px;
-    }
-
-    .vertical-timeline-element-icon .badge-dot-xl {
-        box-shadow: 0 0 0 5px #fff;
-    }
-
     .vertical-timeline-element-content {
         position: relative;
         margin-left: 90px;
@@ -156,9 +138,9 @@
     }
 
     .vertical-timeline-element-content .timeline-title {
-        font-size: .77rem;
+        font-size: .73rem;
         text-transform: uppercase;
-        margin: 0 0 .5rem;
+        margin: 0 0 0rem;
         padding: 2px 0 0;
         font-weight: bold;
     }
@@ -166,12 +148,12 @@
     .vertical-timeline-element-content .vertical-timeline-element-date {
         display: block;
         position: absolute;
-        left: -100px;
+        left: -90px;
         top: 0;
         padding-right: 10px;
         text-align: right;
         color: #adb5bd;
-        font-size: 1.15rem;
+        font-size: 1.16rem;
         white-space: nowrap;
     }
 
