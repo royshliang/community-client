@@ -13,50 +13,31 @@
         </ul>
     </div>
     <div class="accordion pt-3" id="accordionExample">
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingOne">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    <span class="badge rounded-pill bg-danger">4</span>
-                    {{ timetable[0]?.name }}
+        <div class="accordion-item" v-for="dayTable in timetable">
+            <h2 class="accordion-header" :id="dayTable.name">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse${dayTable.name}`" aria-expanded="true" :aria-controls="`collapse${dayTable.name}`" :disabled="dayTable.events.length == 0">
+                    <span v-if="dayTable.events.length > 0" class="badge rounded-pill bg-success">{{ dayTable.events.length }}</span>
+                    &nbsp;{{ dayTable.name }}
                 </button>
             </h2>
-            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+            <div :id="`collapse${dayTable.name}`" class="accordion-collapse collapse" :aria-labelledby="dayTable.name" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
                     <div class="row d-flex justify-content-center">
-                        <div class="col-md-6">
-                            <div class="main-card mb-3 card">
+                        <div class="col-12 col-md-10">
+                            <div class="main-card card">
                                 <div class="card-body">
                                     <!-- <h5 class="card-title">User Timeline</h5> -->
                                     <div class="scroll-area">
                                         <div class="vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
-                                            <div class="vertical-timeline-item vertical-timeline-element">
+                                            <div class="vertical-timeline-item vertical-timeline-element" v-for="evt in dayTable.events" :key="evt.id">
                                                 <span class="vertical-timeline-element-icon bounce-in">
                                                     <i class="badge badge-dot badge-dot-xl badge-success"></i>
                                                 </span>
                                                 <div class="vertical-timeline-element-content bounce-in">
-                                                    <h4 class="timeline-title">Computer Architecture</h4>
-                                                    <p>12:00 PM</p>
-                                                    <span class="vertical-timeline-element-date">9:30 AM</span>
-                                                </div>
-                                            </div>
-                                            <div class="vertical-timeline-item vertical-timeline-element">
-                                                <span class="vertical-timeline-element-icon bounce-in">
-                                                    <i class="badge badge-dot badge-dot-xl badge-success"></i>
-                                                </span>
-                                                <div class="vertical-timeline-element-content bounce-in">
-                                                    <h4 class="timeline-title">Network & Internet</h4>
-                                                    <p>4:00 PM</p>
-                                                    <span class="vertical-timeline-element-date">2:00 AM</span>
-                                                </div>
-                                            </div>
-                                            <div class="vertical-timeline-item vertical-timeline-element">
-                                                <span class="vertical-timeline-element-icon bounce-in">
-                                                    <i class="badge badge-dot badge-dot-xl badge-success"></i>
-                                                </span>
-                                                <div class="vertical-timeline-element-content bounce-in">
-                                                    <h4 class="timeline-title">Calculus & Linear Algaebra</h4>
-                                                    <p>6:00 PM</p>
-                                                    <span class="vertical-timeline-element-date">4:00 PM</span>
+                                                    <h6 class="timeline-title">{{ evt.subjectName }}</h6>
+                                                    <p>{{ evt.endTime }}</p>
+                                                    <p>{{ evt.locationCode }}</p>
+                                                    <span class="vertical-timeline-element-date">{{ evt.startTime }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -65,70 +46,6 @@
                             </div>
                         </div> 
                     </div> 
-                </div>
-            </div>
-        </div>
-
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingTwo">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                <span class="badge rounded-pill bg-danger">1</span>
-                Tuesday
-            </button>
-            </h2>
-            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-                </div>
-            </div>
-        </div>
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingThree">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                <span class="badge rounded-pill bg-danger">2</span>
-                Wednesday
-            </button>
-            </h2>
-            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-                    <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions.
-                </div>
-            </div>
-        </div>
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingFour">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                <span class="badge rounded-pill bg-danger">0</span>
-                Thursday
-            </button>
-            </h2>
-            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-                    <strong>This is the fourth item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions.
-                </div>
-            </div>
-        </div>
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingFive">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                <span class="badge rounded-pill bg-danger">4</span>
-                Friday
-            </button>
-            </h2>
-            <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-                    <strong>This is the fifth item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions.
-                </div>
-            </div>
-        </div>
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingSix">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                Saturday
-            </button>
-            </h2>
-            <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionExample">
-                <div class="accordion-body">
-                    <strong>This is the sixth item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element.
                 </div>
             </div>
         </div>
@@ -187,7 +104,7 @@
     })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
     .scroll-area {
         overflow-x: hidden;
         height: auto;
@@ -196,7 +113,7 @@
     .vertical-timeline {
         width: 100%;
         position: relative;
-        padding: 1.5rem 0 1rem;
+        padding: 1rem 0 0rem;
     }
     .vertical-timeline::before {
         content: '';
@@ -210,11 +127,12 @@
     }
     .vertical-timeline-element {
         position: relative;
-        margin: 0 0 1rem;
+        margin: 0 0 0.5rem;
     }
     .vertical-timeline--animate .vertical-timeline-element-icon.bounce-in {
         visibility: visible;
         animation: cd-bounce-1 .8s;
+
     }
     .vertical-timeline-element-icon {
         position: absolute;
@@ -230,10 +148,15 @@
         position: relative;
         margin-left: 90px;
         font-size: .8rem;
+        > p:nth-child(3) {
+            color: darkorange;
+            font-weight: 700;
+            float: right;
+        }
     }
 
     .vertical-timeline-element-content .timeline-title {
-        font-size: .8rem;
+        font-size: .77rem;
         text-transform: uppercase;
         margin: 0 0 .5rem;
         padding: 2px 0 0;
@@ -243,12 +166,12 @@
     .vertical-timeline-element-content .vertical-timeline-element-date {
         display: block;
         position: absolute;
-        left: -90px;
+        left: -100px;
         top: 0;
         padding-right: 10px;
         text-align: right;
         color: #adb5bd;
-        font-size: 1.31rem;
+        font-size: 1.15rem;
         white-space: nowrap;
     }
 

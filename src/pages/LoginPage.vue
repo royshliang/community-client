@@ -5,11 +5,11 @@
                 <div class="card border-0 rounded-4">
                     <div class="card-body p-3 p-md-4 p-xl-5">
                         <div class="row">
-                    <div class="col-12">
-                        <div class="mb-4">
-                        <h3>My Timetable</h3>
-                        </div>
-                    </div>
+                            <div class="col-12">
+                                <div class="mb-4">
+                                    <h3>My Timetable</h3>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="row gy-3 overflow-hidden">
@@ -29,11 +29,28 @@
                             </div>
                         </div>
                         
-                        <div class="container p-3">
-                            <qrcode-stream @detect="onDetect" @decode="onDecode">111</qrcode-stream>
-                        </div>
-
+                        <!-- 
+                            <div class="container p-3">
+                                <qrcode-stream @detect="onDetect" @decode="onDecode">111</qrcode-stream>
+                            </div> 
+                        -->
+                        
                         <!--
+                        <div class="container p-3">
+                            <p class="decode-result">
+                            Last result: <b>{{ result }}</b>
+                            </p>
+                            <hr/>
+                            <qrcode-stream :paused="paused" @detect="onDetect" @camera-on="onCameraOn" @camera-off="onCameraOff" @error="onError">
+                                <div v-show="showScanConfirmation" class="scan-confirmation">
+                                    <img v-if="showlah" src="./../assets/checkmark..svg" alt="Checkmark" width="128" />
+                                </div>
+                            </qrcode-stream>
+                        </div>
+                        -->
+
+                        <!-- ================================ S O C I A L   S I G I N S =============================== -->
+                        <!-- 
                         <div class="row">
                             <div class="col-12">
                                 <p class="mt-4 mb-4">Or continue with</p>
@@ -58,6 +75,7 @@
                             </div>
                         </div>
                         -->
+                        <!-- ================================ /S O C I A L   S I G I N S =============================== -->
                     </div>
                 </div>
             </div>
@@ -73,7 +91,7 @@
 
     import { useAuthStore } from '@/stores/AuthStore'
 
-    import { getMessaging, getToken, onMessage } from "firebase/messaging";
+    //import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
     const email = ref('')
     const isLoading = ref(false)
@@ -81,40 +99,62 @@
     const authStore = useAuthStore()
     const router = useRouter()
 
-    function onDetect(data) {
-        alert('on detect:' + JSON.stringify(data))
-    }
-    function onDecode(data) {
-        alert('ondecode');
-        alert(data)
+    // --- ====================== Q R   C O D E   R E A D E R ================== -- //
+    // const showScanConfirmation = ref(false)
+    // const paused = ref(false)
+    // const result = ref("")
+        // const showlah = ref(true)
 
-    }
+    // function onCameraOn() {
+    //   showScanConfirmation.value = false
+    // }
+    // function onCameraOff() {
+    //   showScanConfirmation.value = true
+    // }
+    // async function onDetect(detectedCodes) {
+    //     result.value = JSON.stringify(
+    //         detectedCodes.map(code => code.rawValue)
+    //     )
+    //     paused.value = true
+    //     showlah.value = true
+    //     await timeout(500)
+    //     paused.value = false
+    // }
+    // function timeout(ms) {
+    //     return new Promise((res) => {
+    //         window.setTimeout(res, ms)
+    //         showlah.value = false
+    //     })
+    // }
+
 
     async function login() {
         let fbToken = null;
 
         // 1. ======================== F I R E B A S E   T O K E N =========================== //
-        try
-        {
-            isLoading.value = true
+        // try
+        // {
+        //     isLoading.value = true
 
-            const messaging = getMessaging();
-            await getToken(messaging, { vapidKey: 'BAybJDScOTCYPQAVYCSnqkVbpiAyQyJALWxe23NRHzRbofv5qDql2p1rxwrxuTpcqngTiCO9o5HToxhWGWdmFcg'})
-                .then(async (result) => {
-                    console.log("currentToken:" + result)
-                    fbToken = result
-                })
-                .catch((err) => {
-                    console.log('An error occurred while retrieving token. ', err)
-                });
-        }
-        catch(err) {
-            alert(err.message)
-        }
-        finally {
-            isLoading.value = false
-        }
+        //     const messaging = getMessaging();
+        //     await getToken(messaging, { vapidKey: 'BAybJDScOTCYPQAVYCSnqkVbpiAyQyJALWxe23NRHzRbofv5qDql2p1rxwrxuTpcqngTiCO9o5HToxhWGWdmFcg'})
+        //         .then(async (result) => {
+        //             console.log("currentToken:" + result)
+        //             fbToken = result
+        //         })
+        //         .catch((err) => {
+        //             console.log('An error occurred while retrieving token. ', err)
+        //         });
+        // }
+        // catch(err) {
+        //     alert(err.message)
+        // }
+        // finally {
+        //     isLoading.value = false
+        // }
         // 2. ================== S T U D E N T   R E G I S T R A T I O N =================== // 
+
+        fbToken = new Date().toLocaleDateString()   // *** testing only *** //
         if(fbToken) {
             try {
                 isLoading.value = true
@@ -137,7 +177,7 @@
             }
         }
         else {
-            toast.warning("No tokens available. Notification not enabled", { position: POSITION.TOP_CENTER, timeout: 4500})
+           toast.warning("No tokens available. Notification not enabled", { position: POSITION.TOP_CENTER, timeout: 4500})
         }
 
         router.push("/timetable")
@@ -148,4 +188,16 @@
     })
 </script>
 
-<style scoped></style>
+<style scoped>
+    .scan-confirmation {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+
+        background-color: rgba(255, 255, 255, 0.8);
+
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+    }
+</style>

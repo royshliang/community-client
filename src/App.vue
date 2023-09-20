@@ -36,29 +36,29 @@
 
     const authStore = useAuthStore()
 
-    // --- pwa installation prompt
+    // --- 1. pwa installation prompt
     // const deferredPrompt = ref(null)
     // window.addEventListener("beforeinstallprompt", (e) => {
-    //     e.preventDefault();
-    //     deferredPrompt.value = e;
+    // //     e.preventDefault();
+    // //     deferredPrompt.value = e;
+    // // });
+    // // async function installApp() {
+    // //     deferredPrompt.value.prompt()
+    // //     deferredPrompt.value = null
+    // // }
+
+    // // --- 2. foreground notification display
+    // const messaging = getMessaging();
+    // onMessage(messaging, (payload) => {
+    //     console.log('Message received. ', JSON.stringify(payload))
+    //     let msgData = payload.notification || payload.data
+
+    //     alert(msgData.title)
     // });
-    // async function installApp() {
-    //     deferredPrompt.value.prompt()
-    //     deferredPrompt.value = null
-    // }
 
-    // --- foreground notification display
-    const messaging = getMessaging();
-    onMessage(messaging, (payload) => {
-        console.log('Message received. ', JSON.stringify(payload))
-        let msgData = payload.notification || payload.data
-
-        alert(msgData.title)
-    });
-
-    // --- offline / online events
-    window.addEventListener('online', () => console.log('Became online'));
-    window.addEventListener('offline', () => console.log('Became offline'));
+    // // --- 3. offline / online events
+    // window.addEventListener('online', () => console.log('Became online'));
+    // window.addEventListener('offline', () => console.log('Became offline'));
 
     onMounted(() => {
     })

@@ -22,22 +22,22 @@ export const useTimetableStore = defineStore('TimetableStore', {
                 {id: 6, name: 'Saturday',  events:[]},
             ]
 
-
-            console.log(state.timetable[1].id)
-
             for(var i=0;i < state.timetable.length; i++) {
-                debugger;
                 let timetable = timetableDays.find(x => x.id == state.timetable[i].classDay)
-                debugger;
                 if(timetable) {
                     timetable.events.push({
-                        id: state.timetable[i].id,
-                        subjectName: state.timetable[i].subjectName,
-                        startTime: state.timetable[i].startTime,
-                        endTime: state.timetable[i].endTime
+                        id              : state.timetable[i].id,
+                        subjectName     : state.timetable[i].subjectName,
+                        startTime       : state.timetable[i].startTime,
+                        endTime         : state.timetable[i].endTime,
+                        locationCode    : state.timetable[i].locationCode
                     })
                 }
             }
+
+            timetableDays.forEach(x => {
+                console.log(JSON.stringify(x))
+            })
 
             return timetableDays;
         }
