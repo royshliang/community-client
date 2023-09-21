@@ -60,6 +60,7 @@
  
     import { useTimetableStore } from '@/stores/TimetableStore'
     import { useCourseStore } from '@/stores/CourseStore'
+    import { useAuthStore } from '@/stores/AuthStore'
 
     const selectedCourse = ref(0)
     const isLoading = ref(false)
@@ -69,6 +70,7 @@
     const attendance = ref({})
     const timetable = ref([])
 
+    const authStore = useAuthStore()
     const courseStore = useCourseStore()
     const timetableStore = useTimetableStore()
 
@@ -104,7 +106,12 @@
         isDialogVisible.value = false
     }
     function scanAttendance(evt) {
-        attendance.value = evt
+        debugger;
+        attendance.value = {
+            subjectId   : evt.id,
+            subjectName : evt.subjectName,
+            studentEmail   : authStore.getUser.email
+        }
         isDialogVisible.value  = true
     }
 

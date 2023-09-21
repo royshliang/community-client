@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
 import Toast from 'vue-toastification'
+import { POSITION } from 'vue-toastification'
 import router from './routing/router'
 
 import { VueQrcodeReader } from "vue-qrcode-reader";
@@ -40,7 +41,7 @@ const fb = initializeApp({
 import App from './App.vue'
 createApp(App)
     .use(router)
-    .use(Toast)
+    .use(Toast,  { position: POSITION.TOP_CENTER, timeout: 2100 })
     .use(VueQrcodeReader)
     .use(createPinia())
     .mount('#app')

@@ -2,29 +2,35 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_API_URL
+const AUTH_KEY = "community-client-auth-key"
 
 export const useAuthStore= defineStore('AuthStore', {
     state: () => ({
-        user: {}
+        user: null
     }),
     getters: {
         getUser: (state) => {
-            return state.user
+            return state.user || JSON.parse(localStorage.getItem(AUTH_KEY))
         }
     },
     actions: {
-        validate: async function(vm) {
-            await axios.post(`${API_URL}/student/validate`, vm)
+        authenticate: async function(vm) {
+            this.user = null
+            await axios.post(`${API_URL}/student/authenticate`, vm)
                 .then(res => {
                     if(res.data == 1) {
                         this.user = vm
+                        localStorage.setItem(AUTH_KEY, JSON.stringify(vm)) // caching logic
                     }
-                    else this.user = {}
+                    else throw new Error("unable to register user")
                 })
                 .catch(err => {
                     throw err
                 })
+        },
+        logout: function() {
+            this.user = null
+            window.localStorage.removeItem(AUTH_KEY)    // caching logic
         }
     }
 });
-

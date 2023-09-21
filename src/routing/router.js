@@ -6,7 +6,7 @@ import TimetablePage from '@/pages/TimetablePage.vue'
 import LoginPage from '@/pages/LoginPage.vue'
 
 const router = new createRouter({
-	history: createWebHistory(),
+	history: createWebHashHistory(),
 	routes: [
         {
             path: '/',
@@ -26,15 +26,25 @@ const router = new createRouter({
 })
 
 
-// ----- security authentication
-router.beforeEach(async (to) => {
-    if (to.fullPath != "/login") {
-		if (to.fullPath == "/timetable") {
-			const authStore = useAuthStore()
+// // ----- security authentication
+// router.beforeEach(async (to) => {
+//     if (to.fullPath != "/login") {
+// 		if (to.fullPath == "/timetable") {
+// 			const authStore = useAuthStore()
 
-            if (!authStore.getUser) {
-				await router.push("/login")
-			}
+//             if (!authStore.getUser) {
+// 				await router.push("/login")
+// 			}
+// 		}
+// 	}
+// })
+// ----- security authentication
+router.beforeEach(to => {
+	if (to.fullPath != "/login") {
+        const authStore = useAuthStore()
+
+        if (!authStore.getUser) {
+            return "/login"
 		}
 	}
 })

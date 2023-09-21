@@ -12,13 +12,19 @@
                         <h5>{{ attendance.subjectName }}</h5>
                     </div>
                 </div>
+
+                <!-- <img src="./../../public/checkmark.svg" alt="Checkmark" width="128" /> -->
+                <!-- <button type="button" class="btn btn-danger">Reload</button> -->
+
                 <div class="row mb-3">
                     <div class="col-12">
-                        <loading :active='isLoading' :is-full-page='false' />
-
+                        <loading :active="isLoading" :is-full-page="isFullPage" />
                         <qrcode-stream :paused="paused" @detect="onDetect" @camera-on="onCameraOn" @camera-off="onCameraOff" @error="onError">
                             <div v-show="showScanConfirmation" class="scan-confirmation">
-                                <!-- <img v-if="showlah" src="./../assets/checkmark.svg" alt="Checkmark" width="128" /> -->
+                                <!-- <img src="./../../public/checkmark.svg" alt="Checkmark" width="128" /> -->
+                                <div>
+                                    <h2>Scan OKOK !. Thank you for attending class !!</h2>
+                                </div>
                             </div>
                         </qrcode-stream>
                     </div>
@@ -37,6 +43,8 @@
 
 <script setup>
     import { onMounted, ref, toRef } from 'vue'
+    import { useAttendanceStore } from '@/stores/AttendanceStore'
+    import { useAuthStore } from '@/stores/AuthStore'
 
     import Swal from 'sweetalert2'
     import Loading from 'vue-loading-overlay'
@@ -45,8 +53,14 @@
     const props = defineProps(['model'])
     const emit = defineEmits(['dialogClosed'])
 
+    
     const attendance = toRef(props.model)
     const isLoading = ref(false)
+    const isFullPage = ref(false)
+
+    const toast = useToast()
+    const authStore = useAuthStore()
+    const attendanceStore = useAttendanceStore()
 
     function closeDialog() {
         emit('dialogClosed')
@@ -60,25 +74,39 @@
     const paused = ref(false)
 
     function onCameraOn() {
-        debugger;
         isLoading.value = false;
         showScanConfirmation.value = false
     }
     function onCameraOff() {
-        debugger;
         showScanConfirmation.value = true
+    }
+    function onError(err) {
+        isLoading.value = false
+        console.log(err)
     }
     async function onDetect(detectedCodes) {
         let result = JSON.stringify(detectedCodes.map(code => code.rawValue))
+        if(result) {
+            try {
+                isLoading.value = true
+                await attendanceStore.insert({subjectId: attendance.value.subjectId, email: attendance.value.studentEmail})
 
-        await delayStream(500)
-    }
-    function delayStream(ms) {
+                toast.success("Attendance updated successfully") 
+            }
+            catch(err) {
+                Swal.fire({icon: "error", text: err.message})
+            }
+        }
+
         paused.value = true
+        await timeout(800)
+        paused.value = false 
+    }
 
-        return new Promise((res) => {
-            window.setTimeout(res, ms)
-            paused.value = false
+
+    function timeout(ms) {
+        return new Promise((resolve) => {
+            window.setTimeout(resolve, ms)
         })
     }
 
@@ -89,3 +117,16 @@
 
 </script>
 
+<style scoped>
+    .scan-confirmation {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+
+        background-color: rgba(255, 255, 255, 0.8);
+
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+  }
+</style>

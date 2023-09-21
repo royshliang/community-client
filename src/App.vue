@@ -11,13 +11,11 @@
                 </div> 
                 -->
 
-                <a class="navbar-brand">
-                    HELP 0.5.0
-                </a>
-                <ul class="d-flex">
-                    <span>1.0.0</span>
-                    <button v-if="authStore.getUser.email" type="button" class="btn btn-primary">logout</button>
-                </ul>
+                <a class="navbar-brand">HELP 0.5.0</a>
+                <div class="d-flex" v-if="authStore.getUser">
+                    <span class="text-light">{{ authStore.getUser.email }}</span>
+                    <button type="button" class="btn btn-primary" @click="logout">logout</button>
+                </div>
             </div>
         </nav>
         
@@ -31,10 +29,12 @@
 
 <script setup>
     import { ref, onMounted } from 'vue'
+    import { useRouter } from 'vue-router'
     import { useAuthStore } from '@/stores/AuthStore'
-    import { getMessaging, getToken, onMessage } from "firebase/messaging";
+    //import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
     const authStore = useAuthStore()
+    const router = useRouter()
 
     // --- 1. pwa installation prompt
     // const deferredPrompt = ref(null)
@@ -59,6 +59,12 @@
     // // --- 3. offline / online events
     // window.addEventListener('online', () => console.log('Became online'));
     // window.addEventListener('offline', () => console.log('Became offline'));
+
+    function logout() {
+        authStore.logout()
+
+        router.push("/login")
+    }
 
     onMounted(() => {
     })

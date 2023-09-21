@@ -71,8 +71,6 @@
 
     import { useAuthStore } from '@/stores/AuthStore'
 
-    // import { getMessaging, getToken, onMessage } from "firebase/messaging";
-
     const email = ref('')
     const isLoading = ref(false)
 
@@ -81,62 +79,29 @@
     const router = useRouter()
 
     async function login() {
-        let fbToken = null;
+        try {
+            isLoading.value = true
 
-        // 1. ======================== F I R E B A S E   T O K E N =========================== //
-        // try
-        // {
-        //     isLoading.value = true
-
-        //     const messaging = getMessaging();
-        //     await getToken(messaging, { vapidKey: 'BAybJDScOTCYPQAVYCSnqkVbpiAyQyJALWxe23NRHzRbofv5qDql2p1rxwrxuTpcqngTiCO9o5HToxhWGWdmFcg'})
-        //         .then(async (result) => {
-        //             console.log("currentToken:" + result)
-
-        //             toast.info('Firebase Token received !!!')
-        //             fbToken = result
-        //         })
-        //         .catch((err) => {
-        //             Swal.fire({ icon: 'error', text: 'An error occurred while retrieving token.'})
-        //         });
-        // }
-        // catch(err) {
-        //     Swal.fire({ icon: 'error', text: err.message })
-        // }
-        // finally {
-        //     isLoading.value = false
-        // }
-
-        // 2. ============================ S T U D E N T   L O G I N =========================== // 
-        fbToken = "123123123"
-
-        if(fbToken) {
-            try {
-                isLoading.value = true
-
-                await authStore.authenticate({email: email.value, token: fbToken});
-                if(authStore.getUser != null) {
-                    toast.success("login successful");
-                }
-            }
-            catch(err) {
-                Swal.fire({ icon: 'error', text: err.message })
-            }
-            finally {
-                isLoading.value = false
+            await authStore.validate({email: email.value, token: "dummy123"});
+            if(authStore.getUser != null) {
+                toast.success("login successful")
             }
         }
-        else {
-           toast.warning("No tokens available. Notification not enabled")
+        catch(err) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Verification Failed',
+                text: err.message
+            })
+        }
+        finally {
+            isLoading.value = false
         }
 
         router.push("/timetable")
     }
 
     onMounted(() => {
-        if(authStore.getUser != null) {
-            router.push("/timetable")
-        }
     })
 </script>
 
