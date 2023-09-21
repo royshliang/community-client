@@ -1,5 +1,8 @@
 <template>
     <loading :active='isLoading' :is-full-page="true" />
+    <transition name="fade">
+        <scan-dialog v-if="isDialogVisible" :model="attendance" @dialog-closed="dialogClosed"></scan-dialog>
+    </transition>
 
     <div class="text-center pt-3">
         <h2>Timetable</h2>
@@ -30,7 +33,7 @@
                                     <div class="scroll-area">
                                         <div class="vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
                                             <div class="vertical-timeline-item vertical-timeline-element" v-for="evt in dayTable.events" :key="evt.id">
-                                                <div class="vertical-timeline-element-content">
+                                                <div class="vertical-timeline-element-content" @click="scanAttendance(evt)"> 
                                                     <h6 class="timeline-title">{{ evt.subjectName }}</h6>
                                                     <p>{{ evt.endTime }}</p>
                                                     <p>{{ evt.locationCode }}</p>
@@ -53,21 +56,22 @@
     import { ref, onMounted, watch } from 'vue'
     import Loading from 'vue-loading-overlay'
 
+    import ScanDialog from '../components/ScanDialog.vue'
+ 
     import { useTimetableStore } from '@/stores/TimetableStore'
     import { useCourseStore } from '@/stores/CourseStore'
 
     const selectedCourse = ref(0)
     const isLoading = ref(false)
+    const isDialogVisible = ref(false)
+
     const courses = ref([])
+    const attendance = ref({})
     const timetable = ref([])
 
     const courseStore = useCourseStore()
     const timetableStore = useTimetableStore()
 
-
-    watch(selectedCourse, async (n, o) => {
-        await loadTimetable(n)
-    })
 
     async function loadCourses() {
         try {
@@ -76,6 +80,7 @@
             courses.value = courseStore.getCourses
         }
         catch(err) {
+            Swal.fire({ icon: 'error', text: err.message })
         }
         finally {
             isLoading.value = false
@@ -86,15 +91,26 @@
             isLoading.value = true
             await timetableStore.retrieveTimetableByCourse(courseId)
             timetable.value = timetableStore.getTimetableByDay
-
-            debugger;
         }
         catch(err) {
+            Swal.fire({ icon: 'error', text: err.message })
         }
         finally {
             isLoading.value = false
         }
     }
+
+    function dialogClosed() {
+        isDialogVisible.value = false
+    }
+    function scanAttendance(evt) {
+        attendance.value = evt
+        isDialogVisible.value  = true
+    }
+
+    watch(selectedCourse, async (n, o) => {
+        await loadTimetable(n)
+    })
 
     onMounted(async () => {
         await loadCourses()
@@ -153,7 +169,7 @@
         padding-right: 10px;
         text-align: right;
         color: #adb5bd;
-        font-size: 1.16rem;
+        font-size: 1.11rem;
         white-space: nowrap;
     }
 

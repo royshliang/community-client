@@ -18,8 +18,7 @@ export const useTimetableStore = defineStore('TimetableStore', {
                 {id: 2, name: 'Tuesday',   events:[]},
                 {id: 3, name: 'Wednesday', events:[]},
                 {id: 4, name: 'Thursday',  events:[]},
-                {id: 5, name: 'Friday',    events:[]},
-                {id: 6, name: 'Saturday',  events:[]},
+                {id: 5, name: 'Friday',    events:[]}
             ]
 
             for(var i=0;i < state.timetable.length; i++) {
@@ -51,6 +50,9 @@ export const useTimetableStore = defineStore('TimetableStore', {
                 .catch(err => {
                     throw err
                 })
+        },
+        async insertAttendance() {
+            
         }
     }
 });

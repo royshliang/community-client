@@ -95,15 +95,16 @@
 
     const email = ref('')
     const isLoading = ref(false)
-    const toast = useToast()
+
     const authStore = useAuthStore()
+    const toast = useToast()
     const router = useRouter()
 
     // --- ====================== Q R   C O D E   R E A D E R ================== -- //
     // const showScanConfirmation = ref(false)
     // const paused = ref(false)
     // const result = ref("")
-        // const showlah = ref(true)
+    // const showlah = ref(true)
 
     // function onCameraOn() {
     //   showScanConfirmation.value = false
