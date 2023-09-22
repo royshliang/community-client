@@ -18,10 +18,9 @@ export const useAttendanceStore = defineStore('AttendanceStore', {
     },
     actions: {
         insert: async function(vm) {
-            debugger;
             await axios.post(`${API_URL}/attendance`, vm)
                 .then(res => {
-                    this.attendance = res.data
+                    return res.data
                 })
                 .catch(err => {
                     throw err

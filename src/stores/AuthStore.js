@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
-const API_URL = import.meta.env.VITE_API_URL
-const AUTH_KEY = "community-client-auth-key"
+const API_URL   = import.meta.env.VITE_API_URL
+const AUTH_KEY  = import.meta.env.VITE_APP_AUTH_KEY
 
 export const useAuthStore= defineStore('AuthStore', {
     state: () => ({
@@ -30,7 +30,7 @@ export const useAuthStore= defineStore('AuthStore', {
         },
         logout: function() {
             this.user = null
-            window.localStorage.removeItem(AUTH_KEY)    // caching logic
+            window.localStorage.removeItem(AUTH_KEY)                        // caching logic
         }
     }
 });

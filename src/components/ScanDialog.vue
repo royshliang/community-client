@@ -9,7 +9,7 @@
             <div class="container-fluid p-3">
                 <div class="row mb-3">
                     <div class="col-12 text-center">
-                        <h5>{{ attendance.subjectName }}</h5>
+                        <h5 class="fw-bold">{{ attendance.subjectName }}</h5>
                     </div>
                 </div>
 
@@ -28,13 +28,14 @@
                             </div>
                         </qrcode-stream>
                     </div>
+                    <div class="col-12 text-center pt-2">
+                        <p>** Scan any qrCode. This is a test</p>
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <div class="d-flex justify-content-end">
                     <button type="button" class="btn btn-secondary" @click="closeDialog">Close</button>
-                    &nbsp;&nbsp;
-                    <button type="button" class="btn btn-primary" @click="saveDialog">Save</button>
                 </div>
             </div>
         </div>
@@ -59,16 +60,12 @@
     const isFullPage = ref(false)
 
     const toast = useToast()
-    const authStore = useAuthStore()
     const attendanceStore = useAttendanceStore()
 
     function closeDialog() {
         emit('dialogClosed')
     }
-    async function saveDialog() {
-        emit('dialogClosed')
-    }
-
+ 
     // --- ====================== Q R   C O D E   R E A D E R ================== -- //
     const showScanConfirmation = ref(false)
     const paused = ref(false)
@@ -82,8 +79,13 @@
     }
     function onError(err) {
         isLoading.value = false
-        console.log(err)
-    }
+        Swal.fire({
+            icon: 'error',
+            title: `<p>${err.message}</p>`,
+            text: 'please make sure the device camera is not open in another application'})
+
+        closeDialog()
+   }
     async function onDetect(detectedCodes) {
         let result = JSON.stringify(detectedCodes.map(code => code.rawValue))
         if(result) {

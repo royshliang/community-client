@@ -11,10 +11,12 @@
                 </div> 
                 -->
 
-                <a class="navbar-brand">HELP 0.5.0</a>
-                <div class="d-flex" v-if="authStore.getUser">
-                    <span class="text-light">{{ authStore.getUser.email }}</span>
-                    <button type="button" class="btn btn-primary" @click="logout">logout</button>
+                <a class="navbar-brand">0.7.0</a>
+                <div class="d-flex justify-content-between gap-3" v-if="authStore.getUser">
+                    <div class="text-light">{{ authStore.getUser.email }}</div>
+                    <div>
+                        <button type="button" class="btn btn-sm btn-primary" @click="logout">logout</button>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -31,12 +33,12 @@
     import { ref, onMounted } from 'vue'
     import { useRouter } from 'vue-router'
     import { useAuthStore } from '@/stores/AuthStore'
-    //import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
     const authStore = useAuthStore()
     const router = useRouter()
 
     // --- 1. pwa installation prompt
+    // import { getMessaging, getToken, onMessage } from "firebase/messaging";
     // const deferredPrompt = ref(null)
     // window.addEventListener("beforeinstallprompt", (e) => {
     // //     e.preventDefault();

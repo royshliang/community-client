@@ -9,12 +9,13 @@
         <ul class="nav navbar-nav pt-4">
             <li class="nav-item">
                 <select v-model="selectedCourse" class="form-select">
-                    <option disabled value="0">Please Select</option>
+                    <option disabled value="0">Please select a course</option>
                     <option v-for="(course, index) in courses" :key="index" :value="course.id">{{course.courseName}}</option>
                 </select>
             </li>
         </ul>
     </div>
+
     <div class="accordion pt-3" id="accordionExample">
         <div class="accordion-item" v-for="dayTable in timetable">
             <h2 class="accordion-header" :id="dayTable.name">
@@ -50,10 +51,15 @@
             </div>
         </div>
     </div>
+
+    <div v-if="selectedCourse == 0" class="text-center p-5">
+        <p class="text-black-50"><i>please select a course to view</i></p>
+    </div>
 </template>
 
 <script setup>
     import { ref, onMounted, watch } from 'vue'
+    import Swal from 'sweetalert2'
     import Loading from 'vue-loading-overlay'
 
     import ScanDialog from '../components/ScanDialog.vue'
@@ -106,7 +112,6 @@
         isDialogVisible.value = false
     }
     function scanAttendance(evt) {
-        debugger;
         attendance.value = {
             subjectId   : evt.id,
             subjectName : evt.subjectName,
@@ -147,7 +152,7 @@
     }
     .vertical-timeline-element {
         position: relative;
-        margin: 0 0 0.5rem;
+        margin: 0;
     }
     .vertical-timeline-element-content {
         position: relative;

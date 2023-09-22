@@ -172,8 +172,6 @@
             isLoading.value = true
             await timetableStore.retrieveTimetableByCourse(courseId)
             timetable.value = timetableStore.getTimetableByDay
-
-            debugger;
         }
         catch(err) {
         }

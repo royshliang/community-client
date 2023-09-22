@@ -12,7 +12,6 @@ export const useTimetableStore = defineStore('TimetableStore', {
             return state.timetable
         },
         getTimetableByDay: (state) => {
-            debugger;
             let timetableDays = [
                 {id: 1, name: 'Monday',    events:[]},
                 {id: 2, name: 'Tuesday',   events:[]},
@@ -34,10 +33,6 @@ export const useTimetableStore = defineStore('TimetableStore', {
                 }
             }
 
-            timetableDays.forEach(x => {
-                console.log(JSON.stringify(x))
-            })
-
             return timetableDays;
         }
     },
@@ -50,9 +45,6 @@ export const useTimetableStore = defineStore('TimetableStore', {
                 .catch(err => {
                     throw err
                 })
-        },
-        async insertAttendance() {
-            
         }
     }
 });
