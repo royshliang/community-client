@@ -71,7 +71,7 @@
 
     import { useAuthStore } from '@/stores/AuthStore'
 
-    // import { getMessaging, getToken, onMessage } from "firebase/messaging";
+    import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
     const email = ref('')
     const isLoading = ref(false)
@@ -84,32 +84,30 @@
         let fbToken = null;
 
         // 1. ======================== F I R E B A S E   T O K E N =========================== //
-        // try
-        // {
-        //     isLoading.value = true
+        try
+        {
+            isLoading.value = true
 
-        //     const messaging = getMessaging();
-        //     await getToken(messaging, { vapidKey: 'BAybJDScOTCYPQAVYCSnqkVbpiAyQyJALWxe23NRHzRbofv5qDql2p1rxwrxuTpcqngTiCO9o5HToxhWGWdmFcg'})
-        //         .then(async (result) => {
-        //             console.log("currentToken:" + result)
+            const messaging = getMessaging();
+            await getToken(messaging, { vapidKey: 'BAybJDScOTCYPQAVYCSnqkVbpiAyQyJALWxe23NRHzRbofv5qDql2p1rxwrxuTpcqngTiCO9o5HToxhWGWdmFcg'})
+                .then(async (result) => {
+                    console.log("currentToken:" + result)
 
-        //             toast.info('Firebase Token received !!!')
-        //             fbToken = result
-        //         })
-        //         .catch((err) => {
-        //             Swal.fire({ icon: 'error', text: 'An error occurred while retrieving token.'})
-        //         });
-        // }
-        // catch(err) {
-        //     Swal.fire({ icon: 'error', text: err.message })
-        // }
-        // finally {
-        //     isLoading.value = false
-        // }
+                    toast.info('Firebase Token received !!!')
+                    fbToken = result
+                })
+                .catch((err) => {
+                    Swal.fire({ icon: 'error', text: 'An error occurred while retrieving token.'})
+                });
+        }
+        catch(err) {
+            Swal.fire({ icon: 'error', text: err.message })
+        }
+        finally {
+            isLoading.value = false
+        }
 
         // 2. ============================ S T U D E N T   L O G I N =========================== // 
-        fbToken = "123123123"
-
         if(fbToken) {
             try {
                 isLoading.value = true

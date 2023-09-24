@@ -15,16 +15,16 @@ import '@vuetoasty/dist/index.css'
 
 // --- ======================= P W A   F E A T U R E S ============================ --- //
 // --- 1. this is require for notifications
-// import { initializeApp } from 'firebase/app';
-// const fb = initializeApp({
-//     apiKey: "AIzaSyD61Gsz3cx_8afusV3dArJzu7D6UEP7K8Q",
-//     authDomain: "vue-community-fcm.firebaseapp.com",
-//     projectId: "vue-community-fcm",
-//     storageBucket: "vue-community-fcm.appspot.com",
-//     messagingSenderId: "880762543904",
-//     appId: "1:880762543904:web:b50de0d276a2e0f0bbc145",
-//     measurementId: "G-QFD66SWDVQ"
-// });
+import { initializeApp } from 'firebase/app';
+const fb = initializeApp({
+    apiKey: "AIzaSyD61Gsz3cx_8afusV3dArJzu7D6UEP7K8Q",
+    authDomain: "vue-community-fcm.firebaseapp.com",
+    projectId: "vue-community-fcm",
+    storageBucket: "vue-community-fcm.appspot.com",
+    messagingSenderId: "880762543904",
+    appId: "1:880762543904:web:b50de0d276a2e0f0bbc145",
+    measurementId: "G-QFD66SWDVQ"
+});
 // // --- 2. for capturing sw events
 // import { registerSW } from 'virtual:pwa-register'
 // const updateSW = registerSW({
