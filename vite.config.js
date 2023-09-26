@@ -60,7 +60,7 @@ export default defineConfig({
                         },
                     },
                 ],
-                maximumFileSizeToCacheInBytes: 5000000
+                //maximumFileSizeToCacheInBytes: 5000000
             },
         })
     ],
