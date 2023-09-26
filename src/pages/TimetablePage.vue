@@ -19,16 +19,20 @@
     <div class="accordion pt-3" id="accordionExample">
         <div class="accordion-item" v-for="dayTable in timetable">
             <h2 class="accordion-header" :id="dayTable.name">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse${dayTable.name}`" aria-expanded="true" :aria-controls="`collapse${dayTable.name}`" :disabled="dayTable.events.length == 0">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse${dayTable.name}`" aria-expanded="true" :aria-controls="`collapse${dayTable.name}`" :disabled="dayTable.events.length == 0" ref="accordion">
                     <span v-if="dayTable.events.length > 0" class="badge rounded-pill bg-success">{{ dayTable.events.length }}</span>
                     &nbsp;{{ dayTable.name }}
                 </button>
             </h2>
+            <button type="button" class="btn btn-primart" @click="check">Check</button>
             <div :id="`collapse${dayTable.name}`" class="accordion-collapse collapse" :aria-labelledby="dayTable.name" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
                     <div class="row d-flex justify-content-center">
                         <div class="col-12 col-md-10">
                             <div class="main-card card">
+                                <div class="text-center">
+                                    <p class="small text-warning">click on subject to scan attendance</p>
+                                </div>
                                 <div class="card-body">
                                     <!-- <h5 class="card-title">User Timeline</h5> -->
                                     <div class="scroll-area">
@@ -80,6 +84,13 @@
     const courseStore = useCourseStore()
     const timetableStore = useTimetableStore()
 
+    const accordion = ref(null)
+
+    function check() {
+        let pp = accordion.value
+        debugger;
+    }
+
 
     async function loadCourses() {
         try {
@@ -113,9 +124,9 @@
     }
     function scanAttendance(evt) {
         attendance.value = {
-            subjectId   : evt.id,
-            subjectName : evt.subjectName,
-            studentEmail   : authStore.getUser.email
+            subjectId     : evt.id,
+            subjectName   : evt.subjectName,
+            studentEmail  : authStore.getUser.email
         }
         isDialogVisible.value  = true
     }
@@ -130,6 +141,9 @@
 </script>
 
 <style scoped lang="scss">
+    .small {
+        font-size: 12px;
+    }
     .scroll-area {
         overflow-x: hidden;
         height: auto;
@@ -181,7 +195,7 @@
         padding-right: 10px;
         text-align: right;
         color: #adb5bd;
-        font-size: 1.11rem;
+        font-size: 1.08rem;
         white-space: nowrap;
     }
 

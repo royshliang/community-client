@@ -11,7 +11,7 @@
                 </div> 
                 -->
 
-                <a class="navbar-brand">0.8.0</a>
+                <a class="navbar-brand">0.8.1</a>
                 <div class="d-flex justify-content-between gap-3" v-if="authStore.getUser">
                     <div class="text-light">{{ authStore.getUser.email }}</div>
                     <div>
@@ -26,35 +26,75 @@
         </div>
     </div>
 
+    <footer class="footer mt-auto py-3 bg-light" v-if="deferredPrompt && authStore.getUser">
+        <div class="container text-center">
+            <button type="button" @click="installApp">Install App on your device</button>
+        </div>  
+    </footer>
+
     <!-- <button type="button" @click="installApp" v-if="deferredPrompt != null">INSTALL PROMPT MEH6?</button> -->
 </template>
 
 <script setup>
-    import { ref, onMounted } from 'vue'
+    import { ref, onMounted, watch } from 'vue'
     import { useRouter } from 'vue-router'
     import { useAuthStore } from '@/stores/AuthStore'
+
+    import { BuiltInKeyword } from '@picovoice/porcupine-web';
+    import { usePorcupine } from '@picovoice/porcupine-vue';
+
+    const porcupine = usePorcupine()
+    const porcupineModel = {
+        publicPath: "./porcupine_params.pv",
+    }
+    porcupine.init("T9Eqi1fhE6XyKizyun8yVbiobm6fKlrDBrPzy1lbU6H8XOaV4xsqpw==", [BuiltInKeyword.Porcupine], porcupineModel)
 
     const authStore = useAuthStore()
     const router = useRouter()
 
     // --- 1. pwa installation prompt
-    // import { getMessaging, getToken, onMessage } from "firebase/messaging";
-    // const deferredPrompt = ref(null)
-    // window.addEventListener("beforeinstallprompt", (e) => {
-    // //     e.preventDefault();
-    // //     deferredPrompt.value = e;
-    // // });
-    // // async function installApp() {
-    // //     deferredPrompt.value.prompt()
-    // //     deferredPrompt.value = null
-    // // }
+    const deferredPrompt = ref(null)
+    window.addEventListener("beforeinstallprompt", (e) => {
+        debugger;
+        e.preventDefault();
+        deferredPrompt.value = e;
+    });
+    async function installApp() {
+        deferredPrompt.value.prompt()
+        deferredPrompt.value = null
+    }
+
+    watch(() => porcupine.state.keywordDetection,
+      keyword => {
+        if (keyword !== null) {
+            console.log(keyword)
+            alert("heard you !!!")
+            detections.value.push(keyword.label);
+        }
+      }
+    );
+    watch(() => porcupine.state.isLoaded,
+      n => {
+        console.log("isLoaded " + n)
+      }
+    );
+
+    // watch("porcupine.state.keywordDetection", async (n, o) => {
+    //     console.log(n)
+    // })
+    // watch(porcupine.state.isLoaded, async (n, o) => {
+    //     console.log(n)
+    // })
+    // watch(porcupine.state.isListening, async (n, o) => {
+    //     console.log(n)
+    // })
 
     // // --- 2. foreground notification display
+    // import { getMessaging, getToken, onMessage } from "firebase/messaging";
     // const messaging = getMessaging();
     // onMessage(messaging, (payload) => {
     //     console.log('Message received. ', JSON.stringify(payload))
     //     let msgData = payload.notification || payload.data
-
     //     alert(msgData.title)
     // });
 
@@ -72,4 +112,14 @@
     })
 </script>
 
-<style scoped></style>
+<style scoped>
+    .footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: red;
+    color: white;
+    text-align: center;
+    }
+</style>

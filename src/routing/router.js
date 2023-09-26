@@ -40,12 +40,12 @@ const router = new createRouter({
 // })
 // ----- security authentication
 router.beforeEach(to => {
-	if (to.fullPath != "/login") {
-        const authStore = useAuthStore()
+    const authStore = useAuthStore()
 
-        if (!authStore.getUser) {
+    if (to.fullPath != "/login" && !authStore.getUser) {
+        //if (!authStore.getUser) {
             return "/login"
-		}
+		//}
 	}
 })
 
