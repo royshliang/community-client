@@ -26,17 +26,28 @@
         </div>
     </div>
 
-    <footer class="footer mt-auto py-3 bg-light" v-if="deferredPrompt && authStore.getUser">
+    <footer class="footer">
+        <button class="start-button" v-on:click="initEngine">
+            Init Porcupine
+      </button>
+      <button class="start-button" v-on:click="startEngine">
+            Start Porcupine
+      </button>
+      <button class="start-button" v-on:click="stopEngine">
+            Stop Porcupine
+      </button>            
+    </footer>
+    <!-- <footer class="footer mt-auto py-3 bg-light" v-if="deferredPrompt && authStore.getUser">
         <div class="container text-center">
             <button type="button" @click="installApp">Install App on your device</button>
-        </div>  
-    </footer>
+        </div>
+    </footer> -->
 
     <!-- <button type="button" @click="installApp" v-if="deferredPrompt != null">INSTALL PROMPT MEH6?</button> -->
 </template>
 
 <script setup>
-    import { ref, onMounted, watch } from 'vue'
+    import { ref, onMounted, watch, onBeforeUnmount } from 'vue'
     import { useRouter } from 'vue-router'
     import { useAuthStore } from '@/stores/AuthStore'
 
@@ -47,7 +58,6 @@
     const porcupineModel = {
         publicPath: "./porcupine_params.pv",
     }
-    porcupine.init("T9Eqi1fhE6XyKizyun8yVbiobm6fKlrDBrPzy1lbU6H8XOaV4xsqpw==", [BuiltInKeyword.Porcupine], porcupineModel)
 
     const authStore = useAuthStore()
     const router = useRouter()
@@ -75,9 +85,14 @@
     );
     watch(() => porcupine.state.isLoaded,
       n => {
-        console.log("isLoaded " + n)
+        alert("watch:isLoaded " + n)
       }
     );
+    watch(() => porcupine.state.isListening,
+      n => {
+        alert("watch:isListening " + n)
+      }
+    );    
 
     // watch("porcupine.state.keywordDetection", async (n, o) => {
     //     console.log(n)
@@ -102,6 +117,26 @@
     // window.addEventListener('online', () => console.log('Became online'));
     // window.addEventListener('offline', () => console.log('Became offline'));
 
+    async function initEngine() {
+      alert("initengine")
+    //   if (porcupine.state.isLoaded) {
+    //       await porcupine.release();
+    //       console.log("release")
+    //   }
+
+      await porcupine.release();
+      alert("release")
+      await porcupine.init("T9Eqi1fhE6XyKizyun8yVbiobm6fKlrDBrPzy1lbU6H8XOaV4xsqpw==", [BuiltInKeyword.Porcupine], porcupineModel)
+      alert("init")
+    }
+
+    function startEngine() {
+        porcupine.start()
+    }
+    function stopEngine() {
+        porcupine.stop()
+    }
+
     function logout() {
         authStore.logout()
 
@@ -110,6 +145,9 @@
 
     onMounted(() => {
     })
+    onBeforeUnmount(() => {
+      porcupine.release();
+    });
 </script>
 
 <style scoped>
