@@ -12,6 +12,9 @@ import '@sweet/dist/sweetalert2.min.css';
 import '@vueloader/dist/css/index.css'
 import '@vuetoasty/dist/index.css'
 
+// ===================================================================================== //
+
+
 
 // --- ======================= P W A   F E A T U R E S ============================ --- //
 // --- 1. this is require for notifications

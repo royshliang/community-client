@@ -11,7 +11,7 @@
                 </div> 
                 -->
 
-                <a class="navbar-brand">0.9.0</a>
+                <a class="navbar-brand">0.8.8</a>
                 <div class="d-flex justify-content-between gap-3" v-if="authStore.getUser">
                     <div class="text-light">{{ authStore.getUser.email }}</div>
                     <div>
@@ -25,6 +25,18 @@
             <router-view></router-view>
         </div>
     </div>
+
+    <footer class="footer">
+        <button class="start-button" v-on:click="initEngine">
+            Init Porcupine
+        </button>
+        <button class="start-button" v-on:click="startEngine">
+            Start Porcupine
+        </button>
+        <button class="start-button" v-on:click="stopEngine">
+            Stop Porcupine
+        </button>
+    </footer>
 
     <!-- <footer class="footer mt-auto py-3 bg-light" v-if="deferredPrompt && authStore.getUser">
         <div class="container text-center">
@@ -40,18 +52,16 @@
     import { useRouter } from 'vue-router'
     import { useAuthStore } from '@/stores/AuthStore'
 
-    // ===================================================== //
-    import alanBtn from "@alan-ai/alan-sdk-web";
-    alanBtn({
-        key: 'e1cfc93303534bb7347031b7b709e0942e956eca572e1d8b807a3e2338fdd0dc/stage',
-        onCommand: (commandData) => {
-        if (commandData.command === 'go:back') {
-            alert('123123123')
-            // Call the client code that will react to the received command
-        }
-        },
-    });
-    // ===================================================== //
+    import { BuiltInKeyword } from '@picovoice/porcupine-web';
+    import { usePorcupine } from '@picovoice/porcupine-vue';
+
+    const porcupineKeyword  = {publicPath: "porcupine_wasm.ppn"};
+    const porcupineModel    = {publicPath: "porcupine_params.pv"}
+
+    // const rhinoContext = {publicPath: "${RHN_CONTEXT_PATH}"};
+    // const rhinoModel = {publicPath: "${RHN_MODEL_PATH}"};
+
+    const porcupine = usePorcupine()
 
     const authStore = useAuthStore()
     const router = useRouter()
@@ -69,6 +79,49 @@
     }
 
 
+    watch(() => porcupine.state.keywordDetection,
+        keyword => {
+            if (keyword !== null) {
+                console.log(keyword)
+                alert("heard you !!!")
+                detections.value.push(keyword.label);
+            }
+        }
+    );
+
+    // watch(porcupine.state.isLoaded, (n, o) => {
+    //     debugger;
+    // })
+    // watch(porcupine.state.error, (n, o) => {
+    //     debugger;
+    // })
+
+    watch(() => porcupine.state.error,
+        n => {
+            alert("watch:error " + n)
+        }
+    );    
+    watch(() => porcupine.state.isLoaded,
+        n => {
+            alert("watch:isLoaded " + n)
+        }
+    );
+    watch(() => porcupine.state.isListening,
+        n => {
+            alert("watch:isListening " + n)
+        }
+    );    
+
+    // watch("porcupine.state.keywordDetection", async (n, o) => {
+    //     console.log(n)
+    // })
+    // watch(porcupine.state.isLoaded, async (n, o) => {
+    //     console.log(n)
+    // })
+    // watch(porcupine.state.isListening, async (n, o) => {
+    //     console.log(n)
+    // })
+
     // // --- 2. foreground notification display
     // import { getMessaging, getToken, onMessage } from "firebase/messaging";
     // const messaging = getMessaging();
@@ -82,15 +135,48 @@
     // window.addEventListener('online', () => console.log('Became online'));
     // window.addEventListener('offline', () => console.log('Became offline'));
 
+    async function initEngine() {
+        alert("initengine")
+ 
+        await porcupine.release();
+        alert("release")
+        
+        // await porcupine.init({
+        //     accessKey: "T9Eqi1fhE6XyKizyun8yVbiobm6fKlrDBrPzy1lbU6H8XOaV4xsqpw==", 
+        //     keywords: [BuiltInKeyword.Porcupine], 
+        //     //keywords: porcupineKeyword,
+        //     model: porcupineModel
+        // })
+        await porcupine.init(
+            "T9Eqi1fhE6XyKizyun8yVbiobm6fKlrDBrPzy1lbU6H8XOaV4xsqpw==", 
+             [BuiltInKeyword.Porcupine], 
+             porcupineModel
+        )
+        .then(res => {
+            debugger;
+        })
+        .catch(err => {
+            debugger;
+        })
+
+        alert("init")
+    }
+
+    function startEngine() {
+        porcupine.start()
+    }
+    function stopEngine() {
+        porcupine.stop()
+    }
 
     function logout() {
         authStore.logout()
+
         router.push("/login")
     }
 
     onMounted(() => {
     })
-
     onBeforeUnmount(() => {
       porcupine.release();
     });
@@ -98,12 +184,12 @@
 
 <style scoped>
     .footer {
-        position: fixed;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        background-color: red;
-        color: white;
-        text-align: center;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: red;
+    color: white;
+    text-align: center;
     }
 </style>
