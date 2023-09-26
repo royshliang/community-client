@@ -16,16 +16,18 @@
         </ul>
     </div>
 
+    <button type="button" class="btn btn-primart" @click="animateAccordion(4)">Check</button>
+
+
     <div class="accordion pt-3" id="accordionExample">
         <div class="accordion-item" v-for="dayTable in timetable">
             <h2 class="accordion-header" :id="dayTable.name">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse${dayTable.name}`" aria-expanded="true" :aria-controls="`collapse${dayTable.name}`" :disabled="dayTable.events.length == 0" ref="accordion">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" :data-bs-target="`#collapse${dayTable.name}`" aria-expanded="true" :aria-controls="`collapse${dayTable.name}`" :disabled="dayTable.events.length == 0">
                     <span v-if="dayTable.events.length > 0" class="badge rounded-pill bg-success">{{ dayTable.events.length }}</span>
                     &nbsp;{{ dayTable.name }}
                 </button>
             </h2>
-            <button type="button" class="btn btn-primart" @click="check">Check</button>
-            <div :id="`collapse${dayTable.name}`" class="accordion-collapse collapse" :aria-labelledby="dayTable.name" data-bs-parent="#accordionExample">
+            <div :id="`collapse${dayTable.name}`" class="accordion-collapse collapse" :aria-labelledby="dayTable.name" data-bs-parent="#accordionExample" ref="accordion">
                 <div class="accordion-body">
                     <div class="row d-flex justify-content-center">
                         <div class="col-12 col-md-10">
@@ -65,6 +67,7 @@
     import { ref, onMounted, watch } from 'vue'
     import Swal from 'sweetalert2'
     import Loading from 'vue-loading-overlay'
+    import bootstrap from '@bootstrap/dist/js/bootstrap.js'
 
     import ScanDialog from '../components/ScanDialog.vue'
  
@@ -84,11 +87,63 @@
     const courseStore = useCourseStore()
     const timetableStore = useTimetableStore()
 
-    const accordion = ref(null)
+    // ================================================================================= //
+    const SpeechRecognition       = window.SpeechRecognition || window.webkitSpeechRecognition
+    const SpeechGrammarList       = window.SpeechGrammarList || window.webkitSpeechGrammarList
+    const SpeechRecognitionEvent  = window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
 
-    function check() {
-        let pp = accordion.value
+    const colors = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+    const grammar = `#JSGF V1.0; grammar colors; public <color> = ${colors.join(" | ",)};`;
+
+    const recognition = new SpeechRecognition()
+    const speechRecognitionList = new SpeechGrammarList()
+    speechRecognitionList.addFromString(grammar, 1);
+
+    recognition.grammars = speechRecognitionList;
+    recognition.continuous = true;
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.start()
+
+    recognition.onresult = (event) => {
+        let lastIndex = event.results.length == 0 ? 0 : event.results.length - 1;
+        const color = event.results[lastIndex][0].transcript;
+        const confidence = event.results[lastIndex][0].confidence;
+
+        if(confidence > 0) {
+            let found = colors.findIndex(x => x == color.trim())
+            if(found >= 0) {
+                animateAccordion(found)
+            }
+        }
+        else console.log("bad bad bad")
+        // console.log(`Confidence: ${event.results[lastIndex][0].confidence} :: ${color}`);
+    };
+    recognition.onnomatch = (event) => {
         debugger;
+    };
+    recognition.onerror = (event) => {
+        debugger;
+    };
+    // ================================================================================== //
+
+    const accordion = ref(null)
+    function redisplayAccordion(selectedIndex) {
+        accordion.value.forEach(element => {
+            element.classList.remove('show')
+        });
+        accordion.value[selectedIndex].classList.add('show');
+    }
+    function animateAccordion(selectedIndex) {
+        var collapseElementList = accordion.value.slice.call(document.querySelectorAll('.show'))
+        var collapseList = collapseElementList.map(function (collapseEl) {
+            return new bootstrap.Collapse(collapseEl)
+        })
+
+        var openElement = accordion.value[selectedIndex];
+        return new bootstrap.Collapse(openElement, 'show')
     }
 
 
