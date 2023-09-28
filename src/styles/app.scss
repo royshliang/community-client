@@ -26,6 +26,13 @@
     border-radius: 5px;
     z-index: 10 !important;
 }
+@media (max-width: 480px) {
+    .modal-display {
+        top: 30%;
+        left: 45%;
+        width: 85%;
+    }
+}
 
 // --- dialog transition
 .fade-enter-active,
