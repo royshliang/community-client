@@ -18,7 +18,6 @@
 
     <!-- <button type="button" class="btn btn-primart" @click="animateAccordion(4)">Check</button> -->
 
-
     <div class="accordion pt-3" id="accordionExample">
         <div class="accordion-item" v-for="dayTable in timetable">
             <h2 class="accordion-header" :id="dayTable.name">
@@ -111,7 +110,6 @@
     //     let lastIndex = event.results.length == 0 ? 0 : event.results.length - 1;
     //     const color = event.results[lastIndex][0].transcript;
     //     const confidence = event.results[lastIndex][0].confidence;
-
     //     if(confidence > 0) {
     //         let found = colors.findIndex(x => x == color.trim())
     //         if(found >= 0) {
@@ -144,8 +142,6 @@
     //     return new bootstrap.Collapse(openElement, 'show')
     // }    
     // ================================================================================== //
-
-
 
 
     async function loadCourses() {

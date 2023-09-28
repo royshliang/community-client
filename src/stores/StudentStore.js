@@ -41,23 +41,23 @@ export const useStudentStore = defineStore('StudentStore', {
                     throw err
                 })
         },
-        upsert: async function() {
-            await axios.post(`${API_URL}/student`)
-                .then(res => {
-                    return res.data
-                })
-                .catch(err => {
-                    throw err
-                })
-        },
-        insert: async function(vm) {
-            await axios.post(`${API_URL}/student`, vm)
-                .then(res => {
-                    return res.data
-                })
-                .catch(err => {
-                    throw err
-                })
-        }
+        // upsert: async function() {
+        //     await axios.post(`${API_URL}/student`)
+        //         .then(res => {
+        //             return res.data
+        //         })
+        //         .catch(err => {
+        //             throw err
+        //         })
+        // },
+        // insert: async function(vm) {
+        //     await axios.post(`${API_URL}/student`, vm)
+        //         .then(res => {
+        //             return res.data
+        //         })
+        //         .catch(err => {
+        //             throw err
+        //         })
+        // }
     }
 });
