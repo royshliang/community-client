@@ -41,7 +41,7 @@
     import { useToast } from 'vue-toastification'
     import Swal from 'sweetalert2'
 
-    //import { getMessaging, getToken, onMessage } from "firebase/messaging";   /*PWA*/
+    import { getMessaging, getToken, onMessage } from "firebase/messaging";   /*PWA*/
 
     import { useStudentStore } from '@/stores/StudentStore'
 
@@ -81,30 +81,27 @@
         }
         // --- ======================= /P W A   F E A T U R E S ====================== --- //
         
+        if(fbToken) {
+            try {
+                isLoading.value = true
 
-        try {
-             isLoading.value = true
-
-            await studentStore.register({email: email.value, token: fbToken});
-            if(studentStore.getStudent != null) {
-                toast.success("registration successful");
+                await studentStore.register({email: email.value, token: fbToken});
+                if(studentStore.getStudent != null) {
+                    toast.success("registration successful");
+                }
+            }
+            catch(err) {
+                Swal.fire({ icon: 'error', text: err.message })
+            }
+            finally {
+                isLoading.value = false
             }
         }
-        catch(err) {
-            Swal.fire({ icon: 'error', text: err.message })
-        }
-        finally {
-            isLoading.value = false
-        }
-
-
-        // --- ======================= P W A   F E A T U R E S ====================== --- //
-        // ----- check for token availability
-        if(!fbToken) {
+        else {
             toast.warning("No tokens available. Notifications not enabled")
         }
-        // --- ======================= /P W A   F E A T U R E S ====================== --- //
 
+        // -- still proceed with token and registration (for simplicty sake)
         router.push("/timetable")
     }
 
