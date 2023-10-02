@@ -70,11 +70,11 @@
                     fbToken = result
                 })
                 .catch((err) => {
-                    //Swal.fire({ icon: 'error', text: 'An error occurred while retrieving notification token.'})
+                    Swal.fire({ icon: 'error', text: 'An error occurred while retrieving notification token.'})
                 });
         }
         catch(err) {
-            //Swal.fire({ icon: 'error', text: err.message })
+            Swal.fire({ icon: 'error', text: err.message })
         }
         finally {
             isLoading.value = false

@@ -11,7 +11,7 @@
                 </div> 
                 -->
 
-                <a class="navbar-brand">0.9.5</a>
+                <a class="navbar-brand">0.9.6</a>
                 <div class="d-flex justify-content-between gap-3" v-if="studentStore.getStudent">
                     <div class="text-light">{{ studentStore.getStudent.email }}</div>
                     <div>
