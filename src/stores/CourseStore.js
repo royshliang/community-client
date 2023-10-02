@@ -5,8 +5,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 export const useCourseStore = defineStore('CourseStore', {
     state: () => ({
-        courses: [],
-        course: {}
+        courses: []
     }),
     getters: {
         getCourses: (state) => {

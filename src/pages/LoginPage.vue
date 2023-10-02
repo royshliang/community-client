@@ -21,7 +21,7 @@
                             </div>
                             <div class="col-12">
                                 <div class="d-grid">
-                                    <button class="btn btn-primary btn-lg" @click="login" :disabled="isLoading">
+                                    <button class="btn btn-primary btn-lg" @click="login" :disabled="isLoading || !email">
                                         <span v-if="!isLoading">Log in</span>
                                         <span v-if="isLoading" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
                                     </button>
@@ -41,21 +41,22 @@
     import { useToast } from 'vue-toastification'
     import Swal from 'sweetalert2'
 
-    import { useAuthStore } from '@/stores/AuthStore'
+    //import { getMessaging, getToken, onMessage } from "firebase/messaging";   /*PWA*/
 
-    import { getMessaging, getToken, onMessage } from "firebase/messaging";
+    import { useStudentStore } from '@/stores/StudentStore'
 
-    const email = ref('')
+    const email = ref(null)
     const isLoading = ref(false)
 
-    const authStore = useAuthStore()
+    const studentStore = useStudentStore()
     const toast = useToast()
     const router = useRouter()
 
     async function login() {
         let fbToken = null;
 
-        // 1. ======================== F I R E B A S E   T O K E N =========================== //
+        // --- ======================= P W A   F E A T U R E S ====================== --- //
+        // 1. firebase token
         try
         {
             isLoading.value = true
@@ -78,15 +79,16 @@
         finally {
             isLoading.value = false
         }
+        // --- ======================= /P W A   F E A T U R E S ====================== --- //
+        
 
-        // 2. ============================ S T U D E N T   L O G I N =========================== // 
         try {
              isLoading.value = true
 
-            await authStore.authenticate({email: email.value, token: fbToken});
-            if(authStore.getUser != null) {
-                toast.success("login successful");
-            }            
+            await studentStore.register({email: email.value, token: fbToken});
+            if(studentStore.getStudent != null) {
+                toast.success("registration successful");
+            }
         }
         catch(err) {
             Swal.fire({ icon: 'error', text: err.message })
@@ -95,16 +97,19 @@
             isLoading.value = false
         }
 
-        // ----- this is just for info. App will still proceed
+
+        // --- ======================= P W A   F E A T U R E S ====================== --- //
+        // ----- check for token availability
         if(!fbToken) {
             toast.warning("No tokens available. Notifications not enabled")
         }
+        // --- ======================= /P W A   F E A T U R E S ====================== --- //
 
         router.push("/timetable")
     }
 
     onMounted(() => {
-        if(authStore.getUser != null) {
+        if(studentStore.getUser != null) {
             router.push("/timetable")
         }
     })

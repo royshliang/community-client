@@ -1,6 +1,7 @@
 <template>
     <div class="overlay">
         <div class="modal-display">
+
             <div class="text-center">
                 <h6>Scan your Attendance</h6>
             </div>
@@ -12,10 +13,20 @@
                     </div>
                 </div>
 
+                <!-- <img src="./../../public/checkmark.svg" alt="Checkmark" width="128" /> -->
+                <!-- <button type="button" class="btn btn-danger">Reload</button> -->
+
                 <div class="row mb-3">
                     <div class="col-12" style="position: relative;">
                         <loading :active="isLoading" :is-full-page="false" />
-                        <qrcode-stream @detect="onDetect" @camera-on="onCameraOn" @error="onError"></qrcode-stream>
+                        <qrcode-stream :paused="paused" @detect="onDetect" @camera-on="onCameraOn" @camera-off="onCameraOff" @error="onError">
+                            <div v-show="showScanConfirmation" class="scan-confirmation">
+                                <img src="./../../public/checkmark.svg" alt="Checkmark" width="128" />
+                                <div>
+                                    <h2>Scan OKOK !. Thank you for attending class !!</h2>
+                                </div>
+                            </div>
+                        </qrcode-stream>
                     </div>
                     <div class="col-12 text-center pt-2">
                         <p>** Scan any qrCode. This is a test</p>
@@ -54,10 +65,16 @@
     }
  
     // --- ====================== Q R   C O D E   R E A D E R ================== -- //
+    const showScanConfirmation = ref(false)
+    const paused = ref(false)
+
     function onCameraOn() {
         isLoading.value = false;
+        showScanConfirmation.value = false
     }
-
+    function onCameraOff() {
+        showScanConfirmation.value = true
+    }
     function onError(err) {
         isLoading.value = false
         Swal.fire({
@@ -70,7 +87,6 @@
     
     async function onDetect(detectedCodes) {
         let result = JSON.stringify(detectedCodes.map(code => code.rawValue))
-        
         if(result) {
             try {
                 isLoading.value = true
@@ -86,6 +102,15 @@
                 closeDialog()
             }
         }
+
+        paused.value = true
+        await timeout(800)
+        paused.value = false 
+    }
+    function timeout(ms) {
+        return new Promise((resolve) => {
+            window.setTimeout(resolve, ms)
+        })
     }
     // --- ====================== /Q R   C O D E   R E A D E R ================== -- //
 
@@ -95,4 +120,16 @@
     })
 </script>
 
-<style scoped></style>
+<style scoped>
+    .scan-confirmation {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+
+        background-color: rgba(255, 255, 255, 0.8);
+
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+  }
+</style>

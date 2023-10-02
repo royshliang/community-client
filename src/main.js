@@ -16,7 +16,7 @@ import '@vuetoasty/dist/index.css'
 
 
 
-// --- ======================= P W A   F E A T U R E S ============================ --- //
+// --- ======================= P W A   F E A T U R E S ====================== --- //
 // --- 1. this is require for notifications
 import { initializeApp } from 'firebase/app';
 const fb = initializeApp({
@@ -39,7 +39,7 @@ const fb = initializeApp({
 //         console.log("registered service worker")
 //     },
 // })
-// --- ======================= /P W A   F E A T U R E S ============================ --- //
+// --- ====================== /P W A   F E A T U R E S ======================= --- //
 
 import App from './App.vue'
 createApp(App)

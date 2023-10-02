@@ -11,9 +11,9 @@
                 </div> 
                 -->
 
-                <a class="navbar-brand">0.9.3</a>
-                <div class="d-flex justify-content-between gap-3" v-if="authStore.getUser">
-                    <div class="text-light">{{ authStore.getUser.email }}</div>
+                <a class="navbar-brand">0.9.5</a>
+                <div class="d-flex justify-content-between gap-3" v-if="studentStore.getStudent">
+                    <div class="text-light">{{ studentStore.getStudent.email }}</div>
                     <div>
                         <button type="button" class="btn btn-sm btn-primary" @click="logout">logout</button>
                     </div>
@@ -26,105 +26,62 @@
         </div>
     </div>
 
-    <!-- <footer class="footer mt-auto py-3 bg-light" v-if="deferredPrompt && authStore.getUser">
+    <!-- --- ======================= P W A   F E A T U R E S ====================== --- -->
+    <!-- 
+    <footer class="footer mt-auto py-3 bg-light" v-if="deferredPrompt && authStore.getUser">
         <div class="container text-center">
             <button type="button" @click="installApp">Install App on your device</button>
         </div>
-    </footer> -->
+    </footer> 
+    -->
+    <!-- --- ======================= /P W A   F E A T U R E S ===================== --- -->
 
-    <!-- <button type="button" @click="installApp" v-if="deferredPrompt != null">INSTALL PROMPT MEH6?</button> -->
 </template>
 
 <script setup>
-    import { ref, onMounted, watch, onBeforeUnmount } from 'vue'
     import { useRouter } from 'vue-router'
-    import { useAuthStore } from '@/stores/AuthStore'
+    import { useStudentStore } from '@/stores/StudentStore'
 
-
-    // ===================================================== //
-    // const SpeechRecognition       = window.SpeechRecognition || window.webkitSpeechRecognition
-    // const SpeechGrammarList       = window.SpeechGrammarList || window.webkitSpeechGrammarList
-    // const SpeechRecognitionEvent  = window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
-
-    // const colors = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-    // const grammar = `#JSGF V1.0; grammar colors; public <color> = ${colors.join(" | ",)};`;
-
-    // const recognition = new SpeechRecognition()
-    // const speechRecognitionList = new SpeechGrammarList()
-    // speechRecognitionList.addFromString(grammar, 1);
-
-    // recognition.grammars = speechRecognitionList;
-    // recognition.continuous = true;
-    // recognition.lang = "en-US";
-    // recognition.interimResults = false;
-    // recognition.maxAlternatives = 1;
-
-    // recognition.start()
-
-    // recognition.onresult = (event) => {
-    //     debugger;
-    //     let lastIndex = event.results.length == 0 ? 0 : event.results.length - 1;
-    //     const color = event.results[lastIndex][0].transcript;
-    //     const confidence = event.results[lastIndex][0].confidence;
-
-    //     if(confidence > 0) {
-    //         let found = colors.findIndex(x => x == color.trim())
-    //         if(found >= 0) {
-    //             debugger;
-    //         }
-    //     }
-    //     else console.log("bad bad bad")
-    //     // console.log(`Confidence: ${event.results[lastIndex][0].confidence} :: ${color}`);
-    // };
-    // recognition.onnomatch = (event) => {
-    //     debugger;
-    // };
-    // recognition.onerror = (event) => {
-    //     debugger;
-    // };
-
-    // ===================================================== //
-
-    const authStore = useAuthStore()
+    const studentStore = useStudentStore()
     const router = useRouter()
 
+    // --- ======================= P W A   F E A T U R E S ====================== --- //
     // --- 1. pwa installation prompt
-    const deferredPrompt = ref(null)
-    window.addEventListener("beforeinstallprompt", (e) => {
-        debugger;
-        e.preventDefault();
-        deferredPrompt.value = e;
-    });
-    async function installApp() {
-        deferredPrompt.value.prompt()
-        deferredPrompt.value = null
-    }
-
-
-    // // --- 2. foreground notification display
-    // import { getMessaging, getToken, onMessage } from "firebase/messaging";
-    // const messaging = getMessaging();
-    // onMessage(messaging, (payload) => {
-    //     console.log('Message received. ', JSON.stringify(payload))
-    //     let msgData = payload.notification || payload.data
-    //     alert(msgData.title)
+    // const deferredPrompt = ref(null)
+    // window.addEventListener("beforeinstallprompt", (e) => {
+    //     e.preventDefault();
+    //     deferredPrompt.value = e;
     // });
+    // async function installApp() {
+    //     deferredPrompt.value.prompt()
+    //     deferredPrompt.value = null
+    // }
+    //
+    //  --- 2. foreground notification display
+    import { getMessaging, getToken, onMessage } from "firebase/messaging";
+    const messaging = getMessaging();
+    onMessage(messaging, (payload) => {
+        console.log('Message received. ', JSON.stringify(payload))
+        let msgData = payload.notification || payload.data
+        alert(msgData.title)
+    });    
+    // --- ======================= /P W A   F E A T U R E S ====================== --- //
 
-    // // --- 3. offline / online events
-    // window.addEventListener('online', () => console.log('Became online'));
-    // window.addEventListener('offline', () => console.log('Became offline'));
 
+    // --- =================== O P T I O N A L   F E A T U R E S ================ --- //
+    // --- 1. offline / online events
+    // window.addEventListener('online', () => {
+    //    console.log('Became online')
+    //});
+    // window.addEventListener('offline', () => { 
+    //    console.log('Became offline')
+    //});
+    // --- =================== /O P T I O N A L   F E A T U R E S ================ --- //
 
     function logout() {
-        authStore.logout()
+        studentStore.logout()
         router.push("/login")
     }
-
-    onMounted(() => {
-    })
-
-    onBeforeUnmount(() => {
-    });
 </script>
 
 <style scoped>

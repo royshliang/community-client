@@ -72,7 +72,7 @@
  
     import { useTimetableStore } from '@/stores/TimetableStore'
     import { useCourseStore } from '@/stores/CourseStore'
-    import { useAuthStore } from '@/stores/AuthStore'
+    import { useStudentStore } from '@/stores/StudentStore'
 
     const selectedCourse = ref(0)
     const isLoading = ref(false)
@@ -82,7 +82,7 @@
     const attendance = ref({})
     const timetable = ref([])
 
-    const authStore = useAuthStore()
+    const studentStore = useStudentStore()
     const courseStore = useCourseStore()
     const timetableStore = useTimetableStore()
 
@@ -178,7 +178,7 @@
         attendance.value = {
             subjectId     : evt.id,
             subjectName   : evt.subjectName,
-            studentEmail  : authStore.getUser.email
+            studentEmail  : studentStore.getStudent.email
         }
         isDialogVisible.value  = true
     }

@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory, createWebHashHistory } from "vue-router"
 
-import { useAuthStore } from '@/stores/AuthStore'
+import { useStudentStore } from '@/stores/StudentStore'
 
 import TimetablePage from '@/pages/TimetablePage.vue'
 import LoginPage from '@/pages/LoginPage.vue'
 
 const router = new createRouter({
-	history: createWebHashHistory(),
+	history: createWebHistory(),
 	routes: [
         {
             path: '/',
@@ -26,26 +26,12 @@ const router = new createRouter({
 })
 
 
-// // ----- security authentication
-// router.beforeEach(async (to) => {
-//     if (to.fullPath != "/login") {
-// 		if (to.fullPath == "/timetable") {
-// 			const authStore = useAuthStore()
-
-//             if (!authStore.getUser) {
-// 				await router.push("/login")
-// 			}
-// 		}
-// 	}
-// })
 // ----- security authentication
 router.beforeEach(to => {
-    const authStore = useAuthStore()
+    const studentStore = useStudentStore()
 
-    if (to.fullPath != "/login" && !authStore.getUser) {
-        //if (!authStore.getUser) {
-            return "/login"
-		//}
+    if (to.fullPath != "/login" && !studentStore.getStudent) {
+        return "/login"
 	}
 })
 

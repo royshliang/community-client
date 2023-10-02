@@ -1,63 +1,38 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL
+const AUTH_KEY = "community-client"
 
 export const useStudentStore = defineStore('StudentStore', {
     state: () => ({
-        students: [],
-        student: {},
+        student: null,
     }),
     getters: {
         getStudent: (state) => {
-            return state.student
+            return state.student || JSON.parse(localStorage.getItem(AUTH_KEY))
         }
     },
     actions: {
-        getById: async function(id) {
-            await axios.get(`${API_URL}/student/id/${id}`)
+        register: async function(vm) {
+            this.user = null
+
+            await axios.post(`${API_URL}/student/register`, vm)
                 .then(res => {
-                    this.student = res.data
+                    if(res.data == 1) {
+                        this.student = vm
+                        localStorage.setItem(AUTH_KEY, JSON.stringify(vm))
+                    }
+                    else throw new Error("unable to register user")
                 })
                 .catch(err => {
                     throw err
                 })
         },
-        getByEmail: async function(email) {
-            await axios.get(`${API_URL}/student/email/${email}`)
-                .then(res => {
-                    this.student = res.data
-                })
-                .catch(err => {
-                    throw err
-                })
-        },
-        getByToken: async function(token) {
-            await axios.get(`${API_URL}/student/token/${token}`)
-                .then(res => {
-                    this.student = res.data
-                })
-                .catch(err => {
-                    throw err
-                })
-        },
-        // upsert: async function() {
-        //     await axios.post(`${API_URL}/student`)
-        //         .then(res => {
-        //             return res.data
-        //         })
-        //         .catch(err => {
-        //             throw err
-        //         })
-        // },
-        // insert: async function(vm) {
-        //     await axios.post(`${API_URL}/student`, vm)
-        //         .then(res => {
-        //             return res.data
-        //         })
-        //         .catch(err => {
-        //             throw err
-        //         })
-        // }
+        logout: function() {
+            this.student = null
+
+            localStorage.removeItem(AUTH_KEY)
+        }
     }
 });
