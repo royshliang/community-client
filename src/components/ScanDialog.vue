@@ -33,9 +33,10 @@
 
 <script setup>
     import { onMounted, ref, toRef } from 'vue'
-    import { useAttendanceStore } from '@/stores/AttendanceStore'
+    import { VueQrcodeReader } from 'vue-qrcode-reader'
     import { useToast } from 'vue-toastification'
 
+    import { useAttendanceStore } from '@/stores/AttendanceStore'
     import Loading from 'vue-loading-overlay'
     import Swal from 'sweetalert2'
 

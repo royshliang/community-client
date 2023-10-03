@@ -66,7 +66,6 @@
     import { ref, onMounted, watch } from 'vue'
     import Swal from 'sweetalert2'
     import Loading from 'vue-loading-overlay'
-    import bootstrap from '@bootstrap/dist/js/bootstrap.js'
 
     import ScanDialog from '../components/ScanDialog.vue'
  

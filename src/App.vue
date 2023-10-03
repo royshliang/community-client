@@ -39,6 +39,7 @@
 </template>
 
 <script setup>
+    import { ref } from 'vue'
     import { useRouter } from 'vue-router'
     import { useStudentStore } from '@/stores/StudentStore'
 
@@ -59,7 +60,8 @@
         deferredPrompt.value = null
     }
     //  --- 2. foreground notification display
-    import { getMessaging, onMessage } from "firebase/messaging";
+    import { getMessaging, onMessage } from "firebase/messaging"
+    
     const messaging = getMessaging();
     onMessage(messaging, (payload) => {
         let msgData = payload.notification || payload.data
