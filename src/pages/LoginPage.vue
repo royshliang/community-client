@@ -7,7 +7,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="mb-4">
-                                    <h3>My Timetable</h3>
+                                    <h3>Timetable</h3>
                                 </div>
                             </div>
                         </div>
@@ -41,7 +41,7 @@
     import { useToast } from 'vue-toastification'
     import Swal from 'sweetalert2'
 
-    import { getMessaging, getToken, onMessage } from "firebase/messaging";   /*PWA*/
+    import { getMessaging, getToken } from "firebase/messaging";   /*PWA*/
 
     import { useStudentStore } from '@/stores/StudentStore'
 
@@ -70,7 +70,7 @@
                     fbToken = result
                 })
                 .catch((err) => {
-                    Swal.fire({ icon: 'error', text: 'An error occurred while retrieving notification token.'})
+                    Swal.fire({ icon: 'error', text: `An error occurred while retrieving notification token. ${err.message}`})
                 });
         }
         catch(err) {
@@ -106,22 +106,10 @@
     }
 
     onMounted(() => {
-        if(studentStore.getUser != null) {
+        if(studentStore.getStudent != null) {
             router.push("/timetable")
         }
     })
 </script>
 
-<style scoped>
-    .scan-confirmation {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-
-        background-color: rgba(255, 255, 255, 0.8);
-
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: center;
-    }
-</style>
+<style scoped></style>

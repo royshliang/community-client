@@ -11,7 +11,7 @@
                 </div> 
                 -->
 
-                <a class="navbar-brand">0.9.8</a>
+                <a class="navbar-brand">0.9.9a</a>
                 <div class="d-flex justify-content-between gap-3" v-if="studentStore.getStudent">
                     <div class="text-light">{{ studentStore.getStudent.email }}</div>
                     <div>
@@ -27,13 +27,13 @@
     </div>
 
     <!-- --- ======================= P W A   F E A T U R E S ====================== --- -->
-    <!-- 
-    <footer class="footer mt-auto py-3 bg-light" v-if="deferredPrompt && authStore.getUser">
+    
+    <footer class="footer mt-auto py-3 bg-light" v-if="deferredPrompt && studentStore.getStudent">
         <div class="container text-center">
-            <button type="button" @click="installApp">Install App on your device</button>
+            <button type="button" class="btn btn-danger" @click="installApp">Install on your device</button>
         </div>
     </footer> 
-    -->
+   
     <!-- --- ======================= /P W A   F E A T U R E S ===================== --- -->
 
 </template>
@@ -42,28 +42,34 @@
     import { useRouter } from 'vue-router'
     import { useStudentStore } from '@/stores/StudentStore'
 
+    import Swal from 'sweetalert2';
+
     const studentStore = useStudentStore()
     const router = useRouter()
 
     // --- ======================= P W A   F E A T U R E S ====================== --- //
     // --- 1. pwa installation prompt
-    // const deferredPrompt = ref(null)
-    // window.addEventListener("beforeinstallprompt", (e) => {
-    //     e.preventDefault();
-    //     deferredPrompt.value = e;
-    // });
-    // async function installApp() {
-    //     deferredPrompt.value.prompt()
-    //     deferredPrompt.value = null
-    // }
-    //
+    const deferredPrompt = ref(null)
+    window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault();
+        deferredPrompt.value = e;
+    });
+    async function installApp() {
+        deferredPrompt.value.prompt()
+        deferredPrompt.value = null
+    }
     //  --- 2. foreground notification display
-    import { getMessaging, getToken, onMessage } from "firebase/messaging";
+    import { getMessaging, onMessage } from "firebase/messaging";
     const messaging = getMessaging();
     onMessage(messaging, (payload) => {
-        console.log('Message received. ', JSON.stringify(payload))
         let msgData = payload.notification || payload.data
-        alert(msgData.title)
+
+        console.log('Message received. ', JSON.stringify(payload))
+        Swal.fire({
+            icon: 'info',
+            title: msgData.title,
+            text: msgData.body
+        })
     });    
     // --- ======================= /P W A   F E A T U R E S ====================== --- //
 
