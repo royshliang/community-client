@@ -180,6 +180,22 @@
         }
     }
 
+    function redisplayAccordion(selectedIndex) {
+        accordion.value.forEach(element => {
+            element.classList.remove('show')
+        });
+        accordion.value[selectedIndex].classList.add('show');
+    }
+    function animateAccordion(selectedIndex) {
+        var collapseElementList = accordion.value.slice.call(document.querySelectorAll('.show'))
+        var collapseList = collapseElementList.map(function (collapseEl) {
+            return new bootstrap.Collapse(collapseEl)
+        })
+
+        var openElement = accordion.value[selectedIndex];
+        return new bootstrap.Collapse(openElement, 'show')
+    }
+
     onMounted(async () => {
         await loadCourses()
     })

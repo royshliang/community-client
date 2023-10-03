@@ -11,7 +11,7 @@
                 </div> 
                 -->
 
-                <a class="navbar-brand">0.9.9a</a>
+                <a class="navbar-brand">0.9.9b</a>
                 <div class="d-flex justify-content-between gap-3" v-if="studentStore.getStudent">
                     <div class="text-light">{{ studentStore.getStudent.email }}</div>
                     <div>
@@ -59,7 +59,7 @@
         deferredPrompt.value.prompt()
         deferredPrompt.value = null
     }
-    //  --- 2. foreground notification display
+    //  --- 3. foreground notification display
     import { getMessaging, onMessage } from "firebase/messaging"
     
     const messaging = getMessaging();
@@ -72,7 +72,8 @@
             title: msgData.title,
             text: msgData.body
         })
-    });    
+    });
+    
     // --- ======================= /P W A   F E A T U R E S ====================== --- //
 
 

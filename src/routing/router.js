@@ -30,8 +30,6 @@ const router = new createRouter({
 router.beforeEach(to => {
     const studentStore = useStudentStore()
 
-    debugger;
-
     if (to.fullPath != "/login" && !studentStore.getStudent) {
         return "/login"
 	}
